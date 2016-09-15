@@ -24,13 +24,16 @@ namespace sasco\LibreDTE\SDK;
 /**
  * Clase con las funcionalidades para integrar con LibreDTE
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]sasco.cl)
- * @version 2016-06-04
+ * @version 2016-09-15
  */
 class LibreDTE
 {
 
     private $Rest; ///< Objeto para manejar las conexiones REST
     private $url; ///< Host con la dirección web base de LibreDTE
+    private $header = []; ///< Valores a pasar de la cabecera a curl
+    private $sslv3 = false; ///< Indica si la versión de SSL es la 3 en el servidor
+    private $sslcheck = true; ///< Indica si se debe validar el certificado SSL del servidor
 
     /**
      * Constructor de la clase LibreDTE
@@ -47,23 +50,47 @@ class LibreDTE
     }
 
     /**
+     * Método que permite definir las opciones de SSL
+     * @param header Valores a pasar de la cabecera a curl
+     * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]sasco.cl)
+     * @version 2016-09-15
+     */
+    public function setHeader($header = [])
+    {
+        $this->header = $header;
+    }
+
+    /**
+     * Método que permite definir las opciones de SSL
+     * @param sslv3 Indica si la versión de SSL es la 3 en el servidor
+     * @param sslcheck Indica si se debe validar el certificado SSL del servidor
+     * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]sasco.cl)
+     * @version 2016-09-15
+     */
+    public function setSSL($sslv3 = false, $sslcheck = true)
+    {
+        $this->sslv3 = $sslv3;
+        $this->sslcheck = $sslcheck;
+    }
+
+    /**
      * Método que consume un servicio web de LibreDTE a través de POST
      * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]sasco.cl)
-     * @version 2016-06-04
+     * @version 2016-09-15
      */
     public function post($api, $data = null)
     {
-        return $this->Rest->post($this->url.'/api'.$api, $data);
+        return $this->Rest->post($this->url.'/api'.$api, $data, $this->header, $this->sslv3, $this->sslcheck);
     }
 
     /**
      * Método que consume un servicio web de LibreDTE a través de GET
      * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]sasco.cl)
-     * @version 2016-01-26
+     * @version 2016-09-15
      */
     public function get($api, $data = null)
     {
-        return $this->Rest->get($this->url.'/api'.$api, $data);
+        return $this->Rest->get($this->url.'/api'.$api, $data, $this->header, $this->sslv3, $this->sslcheck);
     }
 
 }

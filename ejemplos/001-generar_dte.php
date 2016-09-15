@@ -25,7 +25,7 @@
  *  - Generar DTE real a partir del temporal
  *  - Obtener PDF a partir del DTE real
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]sasco.cl)
- * @version 2016-06-04
+ * @version 2016-09-15
  */
 
 // datos a utilizar
@@ -61,6 +61,7 @@ require('../vendor/autoload.php');
 
 // crear cliente
 $LibreDTE = new \sasco\LibreDTE\SDK\LibreDTE($hash, $url);
+// $LibreDTE->setSSL(false, false); ///< segundo parámetro =false desactiva verificación de SSL
 
 // crear DTE temporal
 $emitir = $LibreDTE->post('/dte/documentos/emitir', $dte);
