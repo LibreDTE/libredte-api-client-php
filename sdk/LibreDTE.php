@@ -50,7 +50,7 @@ class LibreDTE
     }
 
     /**
-     * Método que permite definir las opciones de SSL
+     * Método que permite definir las cabeceras que se enviarán
      * @param header Valores a pasar de la cabecera a curl
      * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]sasco.cl)
      * @version 2016-09-15
@@ -75,6 +75,9 @@ class LibreDTE
 
     /**
      * Método que consume un servicio web de LibreDTE a través de POST
+     * @param api Recurso de la API
+     * @param data Datos que se enviarán por POST
+     * @return Entrega resultado de la consulta por POST
      * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]sasco.cl)
      * @version 2016-09-15
      */
@@ -85,6 +88,9 @@ class LibreDTE
 
     /**
      * Método que consume un servicio web de LibreDTE a través de GET
+     * @param api Recurso de la API
+     * @param data Datos que se enviarán por GET
+     * @return Entrega resultado de la consulta por GET
      * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]sasco.cl)
      * @version 2016-09-15
      */
