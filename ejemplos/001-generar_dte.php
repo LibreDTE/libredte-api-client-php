@@ -25,7 +25,7 @@
  *  - Generar DTE real a partir del temporal
  *  - Obtener PDF a partir del DTE real
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]sasco.cl)
- * @version 2016-09-15
+ * @version 2016-11-20
  */
 
 // datos a utilizar
@@ -76,7 +76,7 @@ if ($generar['status']['code']!=200) {
 }
 
 // obtener el PDF del DTE
-$generar_pdf = $LibreDTE->post('/dte/documentos/generar_pdf', ['xml'=>$generar['body']['xml']]);
+$generar_pdf = $LibreDTE->get('/dte/dte_emitidos/pdf/'.$generar['body']['dte'].'/'.$generar['body']['folio'].'/'.$generar['body']['emisor']);
 if ($generar_pdf['status']['code']!=200) {
     die('Error al generar PDF del DTE: '.$generar_pdf['body']."\n");
 }
