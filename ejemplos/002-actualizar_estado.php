@@ -21,9 +21,7 @@
 
 /**
  * Ejemplo que muestra los pasos para:
- *  - Emitir DTE temporal
- *  - Generar DTE real a partir del temporal
- *  - Obtener PDF a partir del DTE real
+ *  - Actualizar el estado de un DTE real
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]sasco.cl)
  * @version 2016-09-15
  */
