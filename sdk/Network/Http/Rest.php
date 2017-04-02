@@ -103,7 +103,7 @@ class Rest
                     $data[$key] = $file;
             } else {
                 $data = json_encode($data);
-                $this->header['Content-Length'] = strlen($data);
+                $header['Content-Length'] = strlen($data);
             }
         }
         $response = Socket::$method(
