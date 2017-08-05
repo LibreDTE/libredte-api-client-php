@@ -1,5 +1,5 @@
-Ejemplos servicios web de LibreDTE
-====================================
+Ejemplos consumo servicios web de LibreDTE
+==========================================
 
 Los ejemplos de este directorio consumen servicios web del módulo de
 facturación (Dte) de la aplicación web de LibreDTE.
