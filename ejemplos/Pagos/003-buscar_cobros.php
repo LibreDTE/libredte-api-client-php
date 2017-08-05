@@ -51,7 +51,7 @@ require('../../vendor/autoload.php');
 // crear cliente
 $LibreDTE = new \sasco\LibreDTE\SDK\LibreDTE($hash, $url);
 
-// crear DTE temporal
+// buscar cobros según los filtros definidos
 $buscar = $LibreDTE->post('/pagos/cobros/buscar/'.$emisor, $filtros);
 if ($buscar['status']['code']!=200) {
     die('Error al realizar la búsqueda de los cobros: '.$buscar['body']."\n");
