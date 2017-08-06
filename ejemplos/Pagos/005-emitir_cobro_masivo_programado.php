@@ -22,7 +22,7 @@
 /**
  * Ejemplo que muestra los pasos para:
  *  - Emitir un cobro masivo, emitiendo y enviando por correo, cada uno de los
-]*    documentos generados (si así está configurado)
+ *    documentos generados (si así está configurado)
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]sasco.cl)
  * @version 2017-08-05
  */
