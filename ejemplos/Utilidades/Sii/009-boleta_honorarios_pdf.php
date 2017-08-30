@@ -39,7 +39,7 @@ require('../../../vendor/autoload.php');
 // crear cliente
 $LibreDTE = new \sasco\LibreDTE\SDK\LibreDTE($hash, $url);
 
-// obtener boletas de honorario recibidas en el SII
+// obtener PDF de la boleta de honorario recibida en el SII
 $pdf = $LibreDTE->post('/utilidades/sii/boleta_honorarios_pdf/'.$boleta, [
     'auth'=>[
         'rut' => $rut,
