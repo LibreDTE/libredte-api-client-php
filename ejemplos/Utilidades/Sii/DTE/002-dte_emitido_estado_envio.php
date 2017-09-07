@@ -21,7 +21,7 @@
 
 /**
  * Ejemplo que muestra los pasos para:
- *  - Obtener los documentos recibidos en el SII de un contribuyente (formato CSV o JSON).
+ *  - Desplegar página de consulta de estado de un envío en el SII (formato web).
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]sasco.cl)
  * @version 2017-08-06
  */
@@ -29,36 +29,30 @@
 // datos a utilizar
 $url = 'https://libredte.cl';
 $hash = '';
-$receptor = '76192083-9';
-$desde = date('Y-m-01');
-$hasta = date('Y-m-d');
-$formato = 'csv'; // csv o json
-$certificacion = 0; // =1 certificación, =0 producción
+$emisor = '76192083-9';
+$track_id = 55118222;
+$certificacion = 1; // =1 certificación, =0 producción
 $firma = [
     'cert' => 'firma.crt',
     'key' => 'firma.key',
 ];
 
 // incluir autocarga de composer
-require('../../../vendor/autoload.php');
+require('../../../../vendor/autoload.php');
 
 // crear cliente
 $LibreDTE = new \sasco\LibreDTE\SDK\LibreDTE($hash, $url);
 
-// obtener dte recibidos en el SII
-$recibidos = $LibreDTE->post('/utilidades/sii/dte_recibidos/'.$receptor.'/'.$desde.'/'.$hasta.'?formato='.$formato.'&certificacion='.$certificacion, [
+// buscar la respuesta web del estado del envío al SII
+$web = $LibreDTE->post('/utilidades/sii/dte_emitido_estado_envio/'.$emisor.'/'.$track_id.'&certificacion='.$certificacion, [
     'firma' => [
         'cert-data' => file_get_contents($firma['cert']),
         'key-data' => file_get_contents($firma['key']),
     ]
 ]);
-if ($recibidos['status']['code']!=200) {
-    die('Error al obtener documentos recibibos en el SII: '.$recibidos['body']."\n");
+if ($web['status']['code']!=200) {
+    die('Error al obtener el estado del envío al SII: '.$web['body']."\n");
 }
 
 // guardar datos en el disco
-if ($formato=='csv') {
-    file_put_contents(str_replace('.php', '.csv', basename(__FILE__)), $recibidos['body']);
-} else {
-    file_put_contents(str_replace('.php', '.json', basename(__FILE__)), json_encode($recibidos['body'], JSON_PRETTY_PRINT));
-}
+file_put_contents(str_replace('.php', '.html', basename(__FILE__)), $web['body']);

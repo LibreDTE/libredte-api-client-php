@@ -21,7 +21,7 @@
 
 /**
  * Ejemplo que muestra los pasos para:
- *  - Reobtener timbraje electrónico previamente solicitado (descarga archivo CAF).
+ *  - Obtener listado de boletas de honorarios electrónicas recibidas en el SII de un contribuyente (formato CSV o JSON).
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]sasco.cl)
  * @version 2017-08-06
  */
@@ -29,33 +29,31 @@
 // datos a utilizar
 $url = 'https://libredte.cl';
 $hash = '';
-$emisor = '76192083-9';
-$dte = 33;
-$inicial = 466; // folio inicial del caf
-$final = 470; // folio final del caf
-$fecha = '2017-08-06'; // fecha en que fue autorizado el caf
-$certificacion = 1; // =1 certificación, =0 producción
-$firma = [
-    'cert' => 'firma.crt',
-    'key' => 'firma.key',
-];
+$receptor = '76192083-9';
+$periodo = 201708;
+$formato = 'csv'; // csv o json
+$contrasenia = ''; // contraseña del receptor en el SII
 
 // incluir autocarga de composer
-require('../../../vendor/autoload.php');
+require('../../../../vendor/autoload.php');
 
 // crear cliente
 $LibreDTE = new \sasco\LibreDTE\SDK\LibreDTE($hash, $url);
 
-// solicitar CAF al SII
-$caf = $LibreDTE->post('/utilidades/sii/caf_descargar/'.$emisor.'/'.$dte.'/'.$inicial.'/'.$final.'/'.$fecha.'?certificacion='.$certificacion, [
-    'firma' => [
-        'cert-data' => file_get_contents($firma['cert']),
-        'key-data' => file_get_contents($firma['key']),
-    ]
+// obtener boletas de honorario recibidas en el SII
+$recibidas = $LibreDTE->post('/utilidades/sii/boletas_honorarios_recibidas/'.$receptor.'/'.$periodo.'?formato='.$formato, [
+    'auth'=>[
+        'rut' => $receptor,
+        'clave' => $contrasenia,
+    ],
 ]);
-if ($caf['status']['code']!=200) {
-    die('Error al descargar el CAF desde el SII: '.$caf['body']."\n");
+if ($recibidas['status']['code']!=200) {
+    die('Error al obtener boletas de honorarios recibibas en el SII: '.$recibidas['body']."\n");
 }
 
 // guardar datos en el disco
-file_put_contents(str_replace('.php', '.xml', basename(__FILE__)), $caf['body']);
+if ($formato=='csv') {
+    file_put_contents(str_replace('.php', '.csv', basename(__FILE__)), $recibidas['body']);
+} else {
+    file_put_contents(str_replace('.php', '.json', basename(__FILE__)), json_encode($recibidas['body'], JSON_PRETTY_PRINT));
+}

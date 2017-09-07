@@ -21,7 +21,7 @@
 
 /**
  * Ejemplo que muestra los pasos para:
- *  - Desplegar página de consulta de estado de un envío en el SII (formato web).
+ *  - Reobtener timbraje electrónico previamente solicitado (descarga archivo CAF).
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]sasco.cl)
  * @version 2017-08-06
  */
@@ -30,7 +30,10 @@
 $url = 'https://libredte.cl';
 $hash = '';
 $emisor = '76192083-9';
-$track_id = 55118222;
+$dte = 33;
+$inicial = 466; // folio inicial del caf
+$final = 470; // folio final del caf
+$fecha = '2017-08-06'; // fecha en que fue autorizado el caf
 $certificacion = 1; // =1 certificación, =0 producción
 $firma = [
     'cert' => 'firma.crt',
@@ -38,21 +41,21 @@ $firma = [
 ];
 
 // incluir autocarga de composer
-require('../../../vendor/autoload.php');
+require('../../../../vendor/autoload.php');
 
 // crear cliente
 $LibreDTE = new \sasco\LibreDTE\SDK\LibreDTE($hash, $url);
 
-// buscar la respuesta web del estado del envío al SII
-$web = $LibreDTE->post('/utilidades/sii/dte_emitido_estado_envio/'.$emisor.'/'.$track_id.'&certificacion='.$certificacion, [
+// solicitar CAF al SII
+$caf = $LibreDTE->post('/utilidades/sii/caf_descargar/'.$emisor.'/'.$dte.'/'.$inicial.'/'.$final.'/'.$fecha.'?certificacion='.$certificacion, [
     'firma' => [
         'cert-data' => file_get_contents($firma['cert']),
         'key-data' => file_get_contents($firma['key']),
     ]
 ]);
-if ($web['status']['code']!=200) {
-    die('Error al obtener el estado del envío al SII: '.$web['body']."\n");
+if ($caf['status']['code']!=200) {
+    die('Error al descargar el CAF desde el SII: '.$caf['body']."\n");
 }
 
 // guardar datos en el disco
-file_put_contents(str_replace('.php', '.html', basename(__FILE__)), $web['body']);
+file_put_contents(str_replace('.php', '.xml', basename(__FILE__)), $caf['body']);

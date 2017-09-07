@@ -21,39 +21,47 @@
 
 /**
  * Ejemplo que muestra los pasos para:
- *  - Obtener listado de boletas de honorarios electrónicas recibidas en el SII de un contribuyente (formato CSV o JSON).
+ *  - Enviar masivamente al SII los tipos de transacción de un DTE de compra
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]sasco.cl)
- * @version 2017-08-06
+ * @version 2017-09-06
  */
 
 // datos a utilizar
 $url = 'https://libredte.cl';
 $hash = '';
-$receptor = '76192083-9';
-$periodo = 201708;
-$formato = 'csv'; // csv o json
+$contribuyente = '76192083-9';
+$periodo = 201709;
+$documentos = [
+    ['76187287-7', 33, 10879, 1, 1],
+    ['90635000-9', 33, 40197646, 1, 1],
+]; ///< Código penúltimo y último según documentación del SII para "código tipo operación" y "código impuesto"
 $contrasenia = ''; // contraseña del receptor en el SII
+$firma = [
+    'cert' => 'firma.crt',
+    'key' => 'firma.key',
+]; ///< Este servicio funciona tanto con firma electrónica como con RUT/clave
 
 // incluir autocarga de composer
-require('../../../vendor/autoload.php');
+require('../../../../vendor/autoload.php');
 
 // crear cliente
 $LibreDTE = new \sasco\LibreDTE\SDK\LibreDTE($hash, $url);
 
-// obtener boletas de honorario recibidas en el SII
-$recibidas = $LibreDTE->post('/utilidades/sii/boletas_honorarios_recibidas/'.$receptor.'/'.$periodo.'?formato='.$formato, [
+// asignar tipo de transacción a documentos de compra
+$r = $LibreDTE->post('/utilidades/sii/rcv_tipo_transaccion/'.$contribuyente.'/'.$periodo, [
     'auth'=>[
-        'rut' => $receptor,
+        'rut' => $contribuyente,
         'clave' => $contrasenia,
     ],
+    'documentos' => $documentos,
+    /*'firma' => [
+        'cert-data' => file_get_contents($firma['cert']),
+        'key-data' => file_get_contents($firma['key']),
+    ]*/
 ]);
-if ($recibidas['status']['code']!=200) {
-    die('Error al obtener boletas de honorarios recibibas en el SII: '.$recibidas['body']."\n");
+if ($r['status']['code']!=200) {
+    die('Error al asignar tipos de transacción de DTE de compra: '.$r['body']."\n");
 }
 
-// guardar datos en el disco
-if ($formato=='csv') {
-    file_put_contents(str_replace('.php', '.csv', basename(__FILE__)), $recibidas['body']);
-} else {
-    file_put_contents(str_replace('.php', '.json', basename(__FILE__)), json_encode($recibidas['body'], JSON_PRETTY_PRINT));
-}
+// mostrar resultado
+print_r($r['body']);

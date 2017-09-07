@@ -21,39 +21,49 @@
 
 /**
  * Ejemplo que muestra los pasos para:
- *  - Obtener código de reemplazo de libros electrónicos de compra/venta (entrega JSON con código).
+ *  - Obtener el resumen de un período desde el RCV del SII
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]sasco.cl)
- * @version 2017-08-06
+ * @version 2017-09-06
  */
 
 // datos a utilizar
 $url = 'https://libredte.cl';
 $hash = '';
-$emisor = '76192083-9';
-$periodo = 201604;
-$operacion = 'VENTA';
-$tipo_libro = 'MENSUAL';
-$track_id = 44657176;
-$certificacion = 1; // =1 certificación, =0 producción
+$contribuyente = '76192083-9';
+$operacion = 'COMPRA'; // 'COMPRA' o 'VENTA'
+$periodo = 201709;
+$estado = 'REGISTRO'; // Si es 'COMPRA': 'REGISTRO', 'PENDIENTE', 'NO_INCLUIR' o 'RECLAMADO'
+$formato = 'json'; // csv o json (json entrega información extra)
+$contrasenia = ''; // contraseña del receptor en el SII
 $firma = [
     'cert' => 'firma.crt',
     'key' => 'firma.key',
-];
+]; ///< Este servicio funciona tanto con firma electrónica como con RUT/clave
 
 // incluir autocarga de composer
-require('../../../vendor/autoload.php');
+require('../../../../vendor/autoload.php');
 
 // crear cliente
 $LibreDTE = new \sasco\LibreDTE\SDK\LibreDTE($hash, $url);
 
-// solicitar código de reemplazo de libro al SII
-$codigo = $LibreDTE->post('/utilidades/sii/iecv_codigo_reemplazo/'.$emisor.'/'.$periodo.'/'.$operacion.'/'.$tipo_libro.'/'.$track_id.'?certificacion='.$certificacion, [
-    'firma' => [
+// obtener resumen del registro de compra venta desde el SII
+$resumen = $LibreDTE->post('/utilidades/sii/rcv_resumen/'.$contribuyente.'/'.$operacion.'/'.$periodo.'/'.$estado.'?formato='.$formato, [
+    'auth'=>[
+        'rut' => $contribuyente,
+        'clave' => $contrasenia,
+    ],
+    /*'firma' => [
         'cert-data' => file_get_contents($firma['cert']),
         'key-data' => file_get_contents($firma['key']),
-    ]
+    ]*/
 ]);
-if ($codigo['status']['code']!=200) {
-    die('Error al obtener el código de reemplazo de IECV desde el SII: '.$codigo['body']."\n");
+if ($resumen['status']['code']!=200) {
+    die('Error al obtener el resumen del RCV: '.$resumen['body']."\n");
 }
-echo $codigo['body']."\n";
+
+// guardar datos en el disco
+if ($formato=='csv') {
+    file_put_contents(str_replace('.php', '.csv', basename(__FILE__)), $resumen['body']);
+} else {
+    file_put_contents(str_replace('.php', '.json', basename(__FILE__)), json_encode($resumen['body'], JSON_PRETTY_PRINT));
+}

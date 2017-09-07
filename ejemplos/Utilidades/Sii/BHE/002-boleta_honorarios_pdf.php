@@ -34,7 +34,7 @@ $contrasenia = ''; // contraseña del receptor en el SII
 $boleta = '6030604544643167170B'; // código de barras de la boleta
 
 // incluir autocarga de composer
-require('../../../vendor/autoload.php');
+require('../../../../vendor/autoload.php');
 
 // crear cliente
 $LibreDTE = new \sasco\LibreDTE\SDK\LibreDTE($hash, $url);

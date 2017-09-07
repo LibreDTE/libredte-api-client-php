@@ -21,7 +21,7 @@
 
 /**
  * Ejemplo que muestra los pasos para:
- *  - Obtener listado de contribuyentes autorizados a facturar electrónicamente (formato CSV o JSON).
+ *  - Obtener los documentos recibidos en el SII de un contribuyente (formato CSV o JSON).
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]sasco.cl)
  * @version 2017-08-06
  */
@@ -29,25 +29,36 @@
 // datos a utilizar
 $url = 'https://libredte.cl';
 $hash = '';
-$dia = date('Y-m-d');
+$receptor = '76192083-9';
+$desde = date('Y-m-01');
+$hasta = date('Y-m-d');
 $formato = 'csv'; // csv o json
 $certificacion = 0; // =1 certificación, =0 producción
+$firma = [
+    'cert' => 'firma.crt',
+    'key' => 'firma.key',
+];
 
 // incluir autocarga de composer
-require('../../../vendor/autoload.php');
+require('../../../../vendor/autoload.php');
 
 // crear cliente
 $LibreDTE = new \sasco\LibreDTE\SDK\LibreDTE($hash, $url);
 
-// obtener datos de contribuyentes
-$datos = $LibreDTE->get('/utilidades/sii/contribuyentes_autorizados/'.$dia.'?formato='.$formato.'&certificacion='.$certificacion);
-if ($datos['status']['code']!=200) {
-    die('Error al obtener lo datos de los contribuyentes: '.$datos['body']."\n");
+// obtener dte recibidos en el SII
+$recibidos = $LibreDTE->post('/utilidades/sii/dte_recibidos/'.$receptor.'/'.$desde.'/'.$hasta.'?formato='.$formato.'&certificacion='.$certificacion, [
+    'firma' => [
+        'cert-data' => file_get_contents($firma['cert']),
+        'key-data' => file_get_contents($firma['key']),
+    ]
+]);
+if ($recibidos['status']['code']!=200) {
+    die('Error al obtener documentos recibibos en el SII: '.$recibidos['body']."\n");
 }
 
 // guardar datos en el disco
 if ($formato=='csv') {
-    file_put_contents(str_replace('.php', '.csv', basename(__FILE__)), $datos['body']);
+    file_put_contents(str_replace('.php', '.csv', basename(__FILE__)), $recibidos['body']);
 } else {
-    file_put_contents(str_replace('.php', '.json', basename(__FILE__)), json_encode($datos['body'], JSON_PRETTY_PRINT));
+    file_put_contents(str_replace('.php', '.json', basename(__FILE__)), json_encode($recibidos['body'], JSON_PRETTY_PRINT));
 }

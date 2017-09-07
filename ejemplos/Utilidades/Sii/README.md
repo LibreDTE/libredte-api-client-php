@@ -8,15 +8,23 @@ que ingresar al sitio web del SII para hacer estas acciones.
 
 Los servicios actualmente permiten:
 
-1. Obtener listado de contribuyentes autorizados (formato CSV o JSON).
-2. Desplegar página de consulta de estado de un envío en el SII (formato web).
-3. Obtener documentos recibidos en el SII para un contribuyente (formato CSV o JSON).
-4. Solicitar timbraje electrónico nuevo (descarga archivo CAF).
-5. Reobtener timbraje electrónico previamente solicitado (descarga archivo CAF).
-6. Obtener código de reemplazo de libros electrónicos de compra/venta (entrega JSON con código).
-7. Consultar situación tributaria (entrega JSON con datos del contribuyente).
-8. Obtener listado de boletas de honorarios electrónicas recibidas en el SII de un contribuyente (formato CSV o JSON).
-9. Descargar el PDF de una boleta de honorarios electrónica.
+1. BHE (boleta honorarios electrónica):
+    - Obtener listado de boletas de honorarios electrónicas recibidas en el SII de un contribuyente (formato CSV o JSON).
+    - Descargar el PDF de una boleta de honorarios electrónica.
+
+2. DTE (documentos tributarios electrónicos):
+    - Obtener listado de contribuyentes autorizados (formato CSV o JSON).
+    - Desplegar página de consulta de estado de un envío en el SII (formato web).
+    - Obtener documentos recibidos en el SII para un contribuyente (formato CSV o JSON).
+    - Solicitar timbraje electrónico nuevo (descarga archivo CAF).
+    - Reobtener timbraje electrónico previamente solicitado (descarga archivo CAF).
+    - Obtener código de reemplazo de libros electrónicos de compra/venta (entrega JSON con código).
+    - Consultar situación tributaria (entrega JSON con datos del contribuyente).
+
+3. RCV (registro compra venta):
+    - Obtener resumen de un período.
+    - Obtener detalle con los DTE de un período.
+    - Asignar tipo de transacción a DTE del registro de compras.
 
 Para poder consumir los servicios desde una aplicación propia se requiere una
 cuenta autorizada en libredte.cl Primero [regístrate](https://libredte.cl/usuarios/registrar)

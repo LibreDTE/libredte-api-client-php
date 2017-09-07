@@ -21,39 +21,50 @@
 
 /**
  * Ejemplo que muestra los pasos para:
- *  - Solicitar timbraje electrónico nuevo (descarga archivo CAF).
+ *  - Obtener el detalle de un período desde el RCV del SII
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]sasco.cl)
- * @version 2017-08-06
+ * @version 2017-09-06
  */
 
 // datos a utilizar
 $url = 'https://libredte.cl';
 $hash = '';
-$emisor = '76192083-9';
+$contribuyente = '76192083-9';
+$operacion = 'COMPRA'; // 'COMPRA' o 'VENTA'
+$periodo = 201709;
 $dte = 33;
-$cantidad = 5; // si la cantidad es superior a la cantidad autorizada disponible, se obtiene el máximo posible
-$certificacion = 1; // =1 certificación, =0 producción
+$estado = 'REGISTRO'; // Si es 'COMPRA': 'REGISTRO', 'PENDIENTE', 'NO_INCLUIR' o 'RECLAMADO'
+$formato = 'json'; // csv o json (json entrega información extra)
+$contrasenia = ''; // contraseña del receptor en el SII
 $firma = [
     'cert' => 'firma.crt',
     'key' => 'firma.key',
-];
+]; ///< Este servicio funciona tanto con firma electrónica como con RUT/clave
 
 // incluir autocarga de composer
-require('../../../vendor/autoload.php');
+require('../../../../vendor/autoload.php');
 
 // crear cliente
 $LibreDTE = new \sasco\LibreDTE\SDK\LibreDTE($hash, $url);
 
-// solicitar CAF al SII
-$caf = $LibreDTE->post('/utilidades/sii/caf_solicitar/'.$emisor.'/'.$dte.'/'.$cantidad.'?certificacion='.$certificacion, [
-    'firma' => [
+// obtener detalle del registro de compra venta desde el SII
+$detalle = $LibreDTE->post('/utilidades/sii/rcv_detalle/'.$contribuyente.'/'.$operacion.'/'.$periodo.'/'.$dte.'/'.$estado.'?formato='.$formato, [
+    'auth'=>[
+        'rut' => $contribuyente,
+        'clave' => $contrasenia,
+    ],
+    /*'firma' => [
         'cert-data' => file_get_contents($firma['cert']),
         'key-data' => file_get_contents($firma['key']),
-    ]
+    ]*/
 ]);
-if ($caf['status']['code']!=200) {
-    die('Error al realizar el timbraje en el SII: '.$caf['body']."\n");
+if ($detalle['status']['code']!=200) {
+    die('Error al obtener el detalle del RCV: '.$detalle['body']."\n");
 }
 
 // guardar datos en el disco
-file_put_contents(str_replace('.php', '.xml', basename(__FILE__)), $caf['body']);
+if ($formato=='csv') {
+    file_put_contents(str_replace('.php', '.csv', basename(__FILE__)), $detalle['body']);
+} else {
+    file_put_contents(str_replace('.php', '.json', basename(__FILE__)), json_encode($detalle['body'], JSON_PRETTY_PRINT));
+}
