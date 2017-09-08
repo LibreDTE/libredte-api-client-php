@@ -19,12 +19,15 @@ Los servicios actualmente permiten:
     - Solicitar timbraje electrónico nuevo (descarga archivo CAF).
     - Reobtener timbraje electrónico previamente solicitado (descarga archivo CAF).
     - Obtener código de reemplazo de libros electrónicos de compra/venta (entrega JSON con código).
-    - Consultar situación tributaria (entrega JSON con datos del contribuyente).
+    - Consultar datos del contribuyente para facturación electrónica (datos privados)
 
 3. RCV (registro compra venta):
     - Obtener resumen de un período.
     - Obtener detalle con los DTE de un período.
     - Asignar tipo de transacción a DTE del registro de compras.
+
+4. Otros:
+    - Consultar situación tributaria (entrega JSON con datos del contribuyente).
 
 Para poder consumir los servicios desde una aplicación propia se requiere una
 cuenta autorizada en libredte.cl Primero [regístrate](https://libredte.cl/usuarios/registrar)
