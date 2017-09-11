@@ -29,6 +29,13 @@ Los servicios actualmente permiten:
 4. Otros:
     - Consultar situación tributaria (entrega JSON con datos del contribuyente).
 
+**Importante**: estos servicios de libredte.cl realizan la comunicación directa
+con el SII y sin almacenar en el servidor de libredte.cl los datos asociados a
+la solicitud o respuesta generada.
+
+¿Cómo puedo usar los servicios web?
+-----------------------------------
+
 Para poder consumir los servicios desde una aplicación propia se requiere una
 cuenta autorizada en libredte.cl Primero [regístrate](https://libredte.cl/usuarios/registrar),
 luego [adquiere el servicio mensual](https://tienda.sasco.cl/catalogo/i/INT1/sii-ws)
@@ -43,10 +50,6 @@ hacer los pasos anteriores y luego configurar lo siguiente en tu instancia:
     'libredte' => 'AQUI EL HASH DE TU USUARIO',
 ]);
 ```
-
-**Importante**: estos servicios de libredte.cl realizan la comunicación directa
-con el SII y sin almacenar en el servidor de libredte.cl los datos asociados a
-la solicitud o respuesta generada.
 
 Sobre la firma
 --------------
