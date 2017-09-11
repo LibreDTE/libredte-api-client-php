@@ -32,12 +32,17 @@ Los servicios actualmente permiten:
 Para poder consumir los servicios desde una aplicación propia se requiere una
 cuenta autorizada en libredte.cl Primero [regístrate](https://libredte.cl/usuarios/registrar),
 luego [adquiere el servicio mensual](https://tienda.sasco.cl/catalogo/i/INT1/sii-ws)
-y finalmente [contáctanos](https://libredte.cl/contacto) para tu usuario.
+y finalmente [contáctanos](https://libredte.cl/contacto) para activar tu usuario.
 
 Si usas la aplicación web de LibreDTE la integración ya está hecha, sólo debes
-[contactarnos](https://libredte.cl/contacto) y solicitar que se active tu cuenta
-de libredte.cl para que puedas empezar a usar estos servicios en tu instancia de
-la aplicación.
+hacer los pasos anteriores y luego configurar lo siguiente en tu instancia:
+
+```php
+// configuración autenticación servicios externos
+\sowerphp\core\Configure::write('proveedores.api', [
+    'libredte' => 'AQUI EL HASH DE TU USUARIO',
+]);
+```
 
 **Importante**: estos servicios de libredte.cl realizan la comunicación directa
 con el SII y sin almacenar en el servidor de libredte.cl los datos asociados a
