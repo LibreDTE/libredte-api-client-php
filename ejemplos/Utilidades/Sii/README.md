@@ -30,8 +30,9 @@ Los servicios actualmente permiten:
     - Consultar situación tributaria (entrega JSON con datos del contribuyente).
 
 Para poder consumir los servicios desde una aplicación propia se requiere una
-cuenta autorizada en libredte.cl Primero [regístrate](https://libredte.cl/usuarios/registrar)
-y luego [contáctanos](https://libredte.cl/contacto) para activarla.
+cuenta autorizada en libredte.cl Primero [regístrate](https://libredte.cl/usuarios/registrar),
+luego [adquiere el servicio mensual](https://tienda.sasco.cl/catalogo/i/INT1/sii-ws)
+y finalmente [contáctanos](https://libredte.cl/contacto) para tu usuario.
 
 Si usas la aplicación web de LibreDTE la integración ya está hecha, sólo debes
 [contactarnos](https://libredte.cl/contacto) y solicitar que se active tu cuenta
