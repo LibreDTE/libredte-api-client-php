@@ -24,8 +24,8 @@
  *  - Buscar DTE emitidos
  * Acá se usó sólo el filtro 'desde' y 'hasta' pero hay más filtros en:
  *   https://doc.libredte.cl/api/#!/DteEmitidos/post_dte_dte_emitidos_buscar_emisor
- * Si se requiere el detalle de cada DTE se puede consultar con:
- *   https://doc.libredte.cl/api/#!/DteEmitidos/get_dte_dte_emitidos_info_dte_folio_emisor
+ * Si se requiere más datos de cada DTE se puede obtener el XML y ahí está todo:
+ *   https://doc.libredte.cl/api/#!/DteEmitidos/get_dte_dte_emitidos_xml_dte_folio_emisor
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]sasco.cl)
  * @version 2017-09-11
  */
