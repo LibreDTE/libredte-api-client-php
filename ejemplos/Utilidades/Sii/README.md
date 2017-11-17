@@ -19,8 +19,10 @@ Los servicios actualmente permiten:
     - Solicitar timbraje electrónico nuevo (descarga archivo CAF).
     - Reobtener timbraje electrónico previamente solicitado (descarga archivo CAF).
     - Obtener código de reemplazo de libros electrónicos de compra/venta (entrega JSON con código).
-    - Consultar datos del contribuyente para facturación electrónica (datos privados)
-    - Verificar datos de un DTE (en un sólo servicio, la verificación completa del DTE)
+    - Consultar datos del contribuyente para facturación electrónica (datos privados).
+    - Verificar datos de un DTE (en un sólo servicio, la verificación completa del DTE).
+    - Consultar estado de un folio de un DTE (formato web).
+    - Anular folio de un DTE (respuesta en formato web).
 
 3. RCV (registro compra venta):
     - Obtener resumen de un período.
