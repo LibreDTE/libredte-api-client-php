@@ -15,14 +15,12 @@ Instalación
 
 Directamente desde la terminal con:
 
-        $ composer require sasco/libredte-sdk-php dev-master
+        $ composer require sasco/libredte-sdk-php
 
 O editando el archivo *composer.json* y agregando:
 
         {
                 "require": {
-                         "sasco/libredte-sdk-php": "dev-master"
+                         "sasco/libredte-sdk-php": "1.*"
                 }
         }
-
-Por el momento, la única versión disponible es la de desarrollo.
