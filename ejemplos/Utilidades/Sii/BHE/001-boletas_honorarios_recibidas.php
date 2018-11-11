@@ -30,7 +30,7 @@
 $url = 'https://libredte.cl';
 $hash = '';
 $receptor = '76192083-9';
-$periodo = 201708;
+$periodo = 201708; // "Ym" o sólo "Y"
 $formato = 'csv'; // csv o json
 $contrasenia = ''; // contraseña del receptor en el SII
 
