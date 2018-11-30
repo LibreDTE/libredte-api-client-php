@@ -23,7 +23,7 @@
  * Ejemplo que muestra los pasos para:
  *  - Obtener el detalle de un período desde el RCV del SII
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]sasco.cl)
- * @version 2017-09-06
+ * @version 2018-11-30
  */
 
 // datos a utilizar
@@ -32,7 +32,7 @@ $hash = '';
 $contribuyente = '76192083-9';
 $operacion = 'COMPRA'; // 'COMPRA' o 'VENTA'
 $periodo = 201709;
-$dte = 33;
+$dte = 33; // Para bajar múltiples DTEs al mismo tiempo usar: '33,34,56,61' (nota: esto cambiará el JSON entregado, sólo detalles, sin información adicional)
 $estado = 'REGISTRO'; // Si es 'COMPRA': 'REGISTRO', 'PENDIENTE', 'NO_INCLUIR' o 'RECLAMADO'
 $formato = 'json'; // csv o json (json entrega información extra)
 $contrasenia = ''; // contraseña del receptor en el SII
