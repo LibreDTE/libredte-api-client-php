@@ -32,6 +32,7 @@ Los servicios actualmente permiten:
     - Obtener resumen de un período.
     - Obtener detalle con los DTE de un período.
     - Asignar tipo de transacción a DTE del registro de compras.
+    - Asignar el resumen de boletas electrónicas emitidas (en realidad, asignar cualquier resumen).
 
 5. Otros:
     - Consultar situación tributaria (entrega JSON con datos del contribuyente).
