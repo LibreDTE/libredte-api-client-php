@@ -8,15 +8,15 @@ que ingresar al sitio web del SII para hacer estas acciones.
 
 Los servicios actualmente permiten:
 
-1. BHE (boleta honorarios electrónica):
+1. BHE (Boleta de Honorarios Electrónica):
     - Obtener listado de boletas de honorarios electrónicas recibidas en el SII de un contribuyente (formato CSV o JSON).
     - Descargar el PDF de una boleta de honorarios electrónica.
 
-2. BTE (boleta terceros electrónica):
+2. BTE (Boleta de Terceros Electrónica):
     - Obtener listado de boletas de terceros electrónicas emitidas en el SII de un contribuyente (formato CSV o JSON).
     - Descargar el HTML de una boleta de terceros electrónica.
 
-3. DTE (documentos tributarios electrónicos):
+3. DTE (Documentos Tributarios Electrónicos):
     - Obtener listado de contribuyentes autorizados (formato CSV o JSON).
     - Desplegar página de consulta de estado de un envío en el SII (formato web).
     - Obtener documentos recibidos en el SII para un contribuyente (formato CSV o JSON).
@@ -28,13 +28,21 @@ Los servicios actualmente permiten:
     - Consultar estado de un folio de un DTE (formato web).
     - Anular folio de un DTE (respuesta en formato web).
 
-4. RCV (registro compra venta):
+4. RCV (Registro Compra y Venta):
     - Obtener resumen de un período.
     - Obtener detalle con los DTE de un período.
     - Asignar tipo de transacción a DTE del registro de compras.
     - Asignar el resumen de boletas electrónicas emitidas (en realidad, asignar cualquier resumen).
 
-5. Otros:
+5. MIPYME (Portal MIPYME del SII):
+    - Obtener listado de documentos emitidos.
+    - Descargar PDF de un documento emitido.
+    - Descargar XML de un documento emitido.
+    - Obtener listado de documentos recibidos.
+    - Descargar PDF de un documento recibido.
+    - Descargar XML de un documento recibido.
+
+6. Otros:
     - Consultar situación tributaria (entrega JSON con datos del contribuyente).
 
 **Importante**: estos servicios de libredte.cl realizan la comunicación directa
