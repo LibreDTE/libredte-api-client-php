@@ -21,9 +21,24 @@
 
 /**
  * Ejemplo que muestra los pasos para:
- *  - Anular un folio en el SII (respuesta en formato web).
+ *  - Anular un folios en el SII (respuesta en formato web).
+ *
+ * Parámetros del servicio web (permite anular rango de folios):
+ *  - EMISOR
+ *  - DTE
+ *  - FOLIO_ANULAR_INICIAL
+ *  - FOLIO_ANULAR_FINAL
+ *  - FOLIO_CAF_INICIAL
+ *  - FOLIO_CAF_FINAL
+ *
+ * Los campos FOLIO_ANULAR_FINAL, FOLIO_CAF_INICIAL y FOLIO_CAF_FINAL son
+ * opcionales, el SII no está verificando si se pasan los del inicio y fin del
+ * CAF. Para anular un rango bastaría pasar FOLIO_ANULAR_INICIAL y
+ * FOLIO_ANULAR_FINAL. De todas formas, siempre se recomienda incluir los folios
+ * inicial y final del CAF para cumplir al 100% con lo que pide el SII.
+ *
  * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]sasco.cl)
- * @version 2017-11-17
+ * @version 2019-07-06
  */
 
 // datos a utilizar
