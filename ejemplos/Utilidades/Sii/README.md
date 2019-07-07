@@ -34,7 +34,11 @@ Los servicios actualmente permiten:
     - Asignar tipo de transacción a DTE del registro de compras.
     - Asignar el resumen de boletas electrónicas emitidas (en realidad, asignar cualquier resumen).
 
-5. MIPYME (Portal MIPYME del SII):
+5. RTC (Registro de Transferencias de Créditos)
+    - Buscar el estado de la cesión de un DTE.
+    - Buscar cesiones en un período de tiempo (deudor, cedente y cesionario).
+
+6. MIPYME (Portal MIPYME del SII):
     - Obtener listado de documentos emitidos.
     - Descargar PDF de un documento emitido.
     - Descargar XML de un documento emitido.
@@ -42,7 +46,7 @@ Los servicios actualmente permiten:
     - Descargar PDF de un documento recibido.
     - Descargar XML de un documento recibido.
 
-6. Otros:
+7. Otros:
     - Consultar situación tributaria (entrega JSON con datos del contribuyente).
 
 **Importante**: estos servicios de libredte.cl realizan la comunicación directa
