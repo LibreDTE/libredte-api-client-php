@@ -6,6 +6,9 @@ habilitado para proporcionar una interfaz de acceso alternativa a la web del SII
 De esta forma es posible hacer integraciones de manera sencilla y evitar tener
 que ingresar al sitio web del SII para hacer estas acciones.
 
+Estos ejemplos están en PHP, pero los servicios web pueden ser consumidos desde
+cualquier lenguaje. No es obligatorio usar PHP.
+
 Los servicios actualmente permiten:
 
 1. BHE (Boleta de Honorarios Electrónica):
