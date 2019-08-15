@@ -15,6 +15,7 @@ Los servicios actualmente permiten:
     - Obtener listado de boletas de honorarios electrónicas recibidas en el SII de un contribuyente (formato CSV o JSON).
     - Descargar el PDF de una boleta de honorarios electrónica.
     - Emitir boleta de honorarios electrónica.
+    - Anular boleta de honorarios electrónica.
 
 2. BTE (Boleta de Terceros Electrónica):
     - Obtener listado de boletas de terceros electrónicas emitidas en el SII de un contribuyente (formato CSV o JSON).
