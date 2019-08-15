@@ -20,6 +20,8 @@ Los servicios actualmente permiten:
 2. BTE (Boleta de Terceros Electrónica):
     - Obtener listado de boletas de terceros electrónicas emitidas en el SII de un contribuyente (formato CSV o JSON).
     - Descargar el HTML de una boleta de terceros electrónica.
+    - Emitir boleta de terceros electrónica.
+    - Anular boleta de terceros electrónica.
 
 3. DTE (Documentos Tributarios Electrónicos):
     - Obtener listado de contribuyentes autorizados (formato CSV o JSON).
