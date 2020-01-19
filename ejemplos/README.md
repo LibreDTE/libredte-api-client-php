@@ -7,4 +7,4 @@ facturación (Dte) de la aplicación web de LibreDTE.
 Los ejemplos en subdirectorios consumen servicios web de otros módulos
 (nombre del directorio es el nombre del módulo).
 
-La documentación de la API está disponible en https://doc.libredte.cl/api
+La documentación de la API está disponible en https://doc.libredte.cl
