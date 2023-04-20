@@ -29,22 +29,30 @@ namespace sasco\LibreDTE\SDK\Network\Http;
 class Socket
 {
 
-    protected static $methods = ['get', 'put', 'patch', 'delete', 'post']; ///< Métodos HTTP soportados
+    /** @var array $methods Métodos HTTP soportados */
+    protected static $methods = ['get', 'put', 'patch', 'delete', 'post'];
+    /** @var array $header Cabeceras por defecto */
     protected static $header = [
         'User-Agent' => 'SowerPHP Network_Http_Socket',
         //'Content-Type' => 'application/x-www-form-urlencoded',
-    ]; ///< Cabeceras por defecto
-    protected static $errors = []; ///< Arrglo para errores de cURL
+    ];
+    /** @var array $errors Arreglo para errores de cURL */
+    protected static $errors = [];
 
     /**
      * Método para ejecutar una solicitud a una URL, es la función que realmente
      * contiene las implementaciones para ejecutar GET, POST, PUT, DELETE, etc
-     * @param method Método HTTP que se requiere ejecutar sobre la URL
-     * @param url URL donde se enviarán los datos
-     * @param data Datos que se enviarán
-     * @param header Cabecera que se enviará
-     * @param sslv3 =true se fuerza sslv3, por defecto es false
-     * @return Respusta HTTP (cabecera y cuerpo)
+     * @param string $method Método HTTP que se requiere ejecutar sobre la URL
+     * @param string $url URL donde se enviarán los datos
+     * @param string $data Datos que se enviarán
+     * @param array $header Cabecera que se enviará
+     * @param boolean $sslv3 true para forzar sslv3, por defecto es false
+     * @return array|boolean Arreglo con la respuesta HTTP (estado, cabecera y cuerpo) o false en caso de solicitar un método desconocido
+     *                       $params = [
+     *                           'status' => (integer) Código (estado) de respuesta HTTP.
+     *                           'header' => (array) Cabeceras de la respuesta HTTP.
+     *                           'body'   => (string) Cuerpo de la respuesta HTTP.
+     *                       ]
      * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
      * @version 2015-12-18
      */
@@ -107,8 +115,8 @@ class Socket
      * Si una cabecera aparece más de una vez, por tener varios valores,
      * entonces dicha cabecerá tendrá como valor un arreglo con todos sus
      * valores.
-     * @param header Cabecera HTTP en texto plano
-     * @return Arreglo asociativo con la cabecera
+     * @param string $header Cabecera HTTP en texto plano
+     * @return array Arreglo asociativo con la cabecera
      * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
      * @version 2014-12-03
      */
@@ -142,8 +150,8 @@ class Socket
     /**
      * Método que procesa la línea de respuesta y extrae el protocolo, código de
      * estado y el mensaje del estado
-     * @param response_line
-     * @return Arreglo con índices: protocol, code, message
+     * @param array|string $response_line
+     * @return array Arreglo con índices: protocol, code, message
      * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
      * @version 2018-11-12
      */
@@ -162,7 +170,7 @@ class Socket
 
     /**
      * Método que entrega los errores ocurridos
-     * @return Arreglo con los strings de los errores de cURL
+     * @return array Arreglo con los strings de los errores de cURL
      * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
      * @version 2016-01-15
      */
@@ -173,7 +181,7 @@ class Socket
 
     /**
      * Método que entrega el último error de cURL
-     * @return Arreglo con los strings de los errores de cURL
+     * @return array Arreglo con los strings de los errores de cURL
      * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
      * @version 2016-01-15
      */

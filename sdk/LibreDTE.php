@@ -29,16 +29,21 @@ namespace sasco\LibreDTE\SDK;
 class LibreDTE
 {
 
-    private $Rest; ///< Objeto para manejar las conexiones REST
-    private $url; ///< Host con la dirección web base de LibreDTE
-    private $header = []; ///< Valores a pasar de la cabecera a curl
-    private $sslv3 = false; ///< Indica si la versión de SSL es la 3 en el servidor
-    private $sslcheck = true; ///< Indica si se debe validar el certificado SSL del servidor
+    /** @var \sasco\LibreDTE\SDK\Network\Http\Rest $Rest Objeto para manejar las conexiones REST */
+    private $Rest;
+    /** @var string $url Host con la dirección web base de LibreDTE */
+    private $url;
+    /** @var array $header Valores a pasar de la cabecera a curl */
+    private $header = [];
+    /** @var boolean $sslv3 Indica si la versión de SSL es la 3 en el servidor */
+    private $sslv3 = false;
+    /** @var boolean $sslcheck Indica si se debe validar el certificado SSL del servidor */
+    private $sslcheck = true;
 
     /**
      * Constructor de la clase LibreDTE
-     * @param hash Hash de autenticación del usuario
-     * @param host Host con la dirección web base de LibreDTE
+     * @param string $hash Hash de autenticación del usuario
+     * @param string $url Host con la dirección web base de LibreDTE
      * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]sasco.cl)
      * @version 2016-06-04
      */
@@ -51,7 +56,7 @@ class LibreDTE
 
     /**
      * Método que permite definir las cabeceras que se enviarán
-     * @param header Valores a pasar de la cabecera a curl
+     * @param array $header Valores a pasar de la cabecera a curl
      * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]sasco.cl)
      * @version 2016-09-15
      */
@@ -62,8 +67,8 @@ class LibreDTE
 
     /**
      * Método que permite definir las opciones de SSL
-     * @param sslv3 Indica si la versión de SSL es la 3 en el servidor
-     * @param sslcheck Indica si se debe validar el certificado SSL del servidor
+     * @param boolean $sslv3 Indica si la versión de SSL es la 3 en el servidor
+     * @param boolean $sslcheck Indica si se debe validar el certificado SSL del servidor
      * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]sasco.cl)
      * @version 2016-09-15
      */
@@ -75,9 +80,9 @@ class LibreDTE
 
     /**
      * Método que consume un servicio web de LibreDTE a través de POST
-     * @param api Recurso de la API
-     * @param data Datos que se enviarán por POST
-     * @return Entrega resultado de la consulta por POST
+     * @param string $api Recurso de la API
+     * @param string|null $data Datos que se enviarán por POST
+     * @return array Entrega de un arreglo con el resultado de la consulta por POST
      * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]sasco.cl)
      * @version 2016-09-15
      */
@@ -88,9 +93,9 @@ class LibreDTE
 
     /**
      * Método que consume un servicio web de LibreDTE a través de GET
-     * @param api Recurso de la API
-     * @param data Datos que se enviarán por GET
-     * @return Entrega resultado de la consulta por GET
+     * @param string $api Recurso de la API
+     * @param string|null $data Datos que se enviarán por GET
+     * @return array Entrega resultado de la consulta por GET
      * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]sasco.cl)
      * @version 2016-09-15
      */
