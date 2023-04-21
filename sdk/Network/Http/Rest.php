@@ -30,14 +30,18 @@ namespace sasco\LibreDTE\SDK\Network\Http;
 class Rest
 {
 
-    protected $methods = ['get', 'put', 'patch', 'delete', 'post']; ///< Métodos HTTP soportados
-    protected $config; ///< Configuración para el cliente REST
-    protected $header; ///< Cabecerá que se enviará
-    protected $errors = []; ///< Errores de la consulta REST
+    /** @var array $methods Métodos HTTP soportados */
+    protected $methods = ['get', 'put', 'patch', 'delete', 'post'];
+    /** @var array $config Configuración para el cliente REST */
+    protected $config;
+    /** @var array $header Cabecera que se enviará */
+    protected $header;
+    /** @var array $errors Errores de la consulta REST */
+    protected $errors = [];
 
     /**
      * Constructor del cliente REST
-     * @param config Arreglo con la configuración del cliente
+     * @param array $config Arreglo con la configuración del cliente
      * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
      * @version 2014-12-02
      */
@@ -63,8 +67,8 @@ class Rest
 
     /**
      * Método que asigna la autenticación para la API REST
-     * @param user Usuario (o token) con el que se está autenticando
-     * @param pass Contraseña con que se está autenticando (se omite si se usa token)
+     * @param string $user Usuario (o token) con el que se está autenticando
+     * @param string $pass Contraseña con que se está autenticando (se omite si se usa token)
      * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
      * @version 2014-12-02
      */
@@ -79,9 +83,14 @@ class Rest
 
     /**
      * Método para realizar solicitud al recurso de la API
-     * @param method Nombre del método que se está ejecutando
-     * @param args Argumentos para el método de \sasco\LibreDTE\SDK\Network\Http\Socket
-     * @return Arreglo con la respuesta HTTP (índices: status, header y body)
+     * @param string $method Nombre del método que se está ejecutando
+     * @param array $args Argumentos para el método de \sasco\LibreDTE\SDK\Network\Http\Socket
+     * @return array|boolean Arreglo con la respuesta HTTP (índices: status, header y body)
+     *                       $params = [
+     *                           'status' => (integer) Código (estado) de respuesta HTTP.
+     *                           'header' => (array) Cabeceras de la respuesta HTTP.
+     *                           'body'   => (string) Cuerpo de la respuesta HTTP.
+     *                       ]
      * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
      * @version 2016-06-04
      */
@@ -127,7 +136,7 @@ class Rest
 
     /**
      * Método que entrega los errores ocurridos al ejecutar la consulta a REST
-     * @return Arreglo con los errores
+     * @return array Arreglo con los errores
      * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]delaf.cl)
      * @version 2016-01-15
      */
