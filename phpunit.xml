@@ -1,0 +1,12 @@
+<phpunit bootstrap="tests/bootstrap.php" colors="true" verbose="true">
+    <testsuites>
+        <testsuite name="LibreDTE: Cliente de API en PHP - Pruebas Unitarias.">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">src</directory>
+        </whitelist>
+    </filter>
+</phpunit>

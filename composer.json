@@ -1,26 +1,35 @@
 {
-    "name": "sasco/libredte-sdk-php",
-    "description": "SDK para realizar la integración con los servicios web de LibreDTE",
+    "name": "libredte/libredte-api-client",
+    "description": "Cliente para realizar la integración con los servicios web de LibreDTE desde PHP.",
     "type": "library",
-    "keywords": ["dte", "sii", "facturación electrónica"],
-    "homepage": "https://libredte.cl",
+    "keywords": ["api", "dte", "sii", "facturación electrónica", "chile"],
+    "homepage": "https://www.libredte.cl",
     "license": "LGPL-3.0+",
     "authors": [
         {
-            "name": "SASCO SpA",
-            "homepage": "https://sasco.cl"
+            "name": "LibreDTE",
+            "homepage": "https://www.libredte.cl"
         }
     ],
     "support": {
-        "issues": "https://github.com/LibreDTE/libredte-sdk-php/issues",
-        "forum": "https://groups.google.com/forum/#!forum/libredte",
-        "source": "https://github.com/LibreDTE/libredte-sdk-php"
+        "issues": "https://github.com/LibreDTE/libredte-api-client-php/issues",
+        "source": "https://github.com/LibreDTE/libredte-api-client-php"
+    },
+    "config": {
+        "platform": {
+            "php": "7.3"
+        }
     },
     "require": {
-        "php": ">=5.5",
+        "php": "^7.3 || ^8.0",
         "ext-curl": "*"
     },
+    "require-dev": {
+        "phpdocumentor/phpdocumentor": "^2.9",
+        "phpunit/phpunit": "^9.2",
+        "vlucas/phpdotenv": "^5.6"
+    },
     "autoload": {
-        "psr-4": {"sasco\\LibreDTE\\SDK\\": "sdk/"}
+        "psr-4": {"libredte\\api_client\\": "src/"}
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * LibreDTE
- * Copyright (C) SASCO SpA (https://sasco.cl)
+ * LibreDTE: Cliente de API en PHP.
+ * Copyright (C) LibreDTE <https://www.libredte.cl>
  *
  * Este programa es software libre: usted puede redistribuirlo y/o modificarlo
  * bajo los términos de la GNU Lesser General Public License (LGPL) publicada
@@ -19,29 +19,17 @@
  * <http://www.gnu.org/licenses/lgpl.html>.
  */
 
+namespace libredte\api_client;
+
 /**
- * Ejemplo que muestra los pasos para:
- *  - Crear cobro para un DTE emitido y obtener URL de pago
- * @author Esteban De La Fuente Rubio, DeLaF (esteban[at]sasco.cl)
- * @version 2017-08-05
+ * Clase ApiException para la gestión de excepciones en el cliente de la API de LibreDTE.
+ *
+ * Esta clase extiende la clase Exception estándar de PHP y se utiliza para manejar
+ * errores específicos que pueden ocurrir durante las interacciones con la API de LibreDTE.
+ * Las instancias de ApiException pueden incluir información adicional relevante para
+ * los errores de la API.
  */
-
-// datos a utilizar
-$url = 'https://libredte.cl';
-$hash = '';
-$emisor = 76192083;
-$dte = 33;
-$folio = 394;
-
-// incluir autocarga de composer
-require('../../vendor/autoload.php');
-
-// crear cliente
-$LibreDTE = new \sasco\LibreDTE\SDK\LibreDTE($hash, $url);
-
-// crear cobro
-$cobro = $LibreDTE->get('/dte/dte_emitidos/cobro/'.$dte.'/'.$folio.'/'.$emisor);
-if ($cobro['status']['code']!=200) {
-    die('Error generar el cobro del DTE emitido: '.$cobro['body']."\n");
+class ApiException extends \Exception
+{
+    // Aquí van los métodos y propiedades de la clase
 }
-print_r($cobro['body']);
