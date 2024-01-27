@@ -40,6 +40,7 @@ También es posible ejecutar una pruebas específica indicando el test. Ejemplo:
 
 ```shell
 ./vendor/bin/phpunit --filter test_dte_facturar
+```
 
 Licencia
 --------
