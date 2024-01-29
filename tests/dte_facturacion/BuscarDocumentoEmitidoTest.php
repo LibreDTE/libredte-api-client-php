@@ -60,9 +60,9 @@ class BuscarDocumentoEmitidoTest extends TestCase
             $this->assertTrue(true);
             if (self::$verbose) {
                 $dte_id = 'T'.$documentos[0]['dte'].'F'.$documentos[0]['folio'];
-                echo "\n",'test_dte_buscar() n_documentos ',count($documentos),"\n";
-                echo "\n",'test_dte_buscar() dte_id ',$dte_id,"\n";
-                echo "\n",'test_dte_buscar() dte_fecha ',$documentos[0]['fecha'],"\n";
+                echo "\n",'test_dte_buscar_documento_emitido() n_documentos ',count($documentos),"\n";
+                echo "\n",'test_dte_buscar_documento_emitido() dte_id ',$dte_id,"\n";
+                echo "\n",'test_dte_buscar_documento_emitido() dte_fecha ',$documentos[0]['fecha'],"\n";
             }
         } catch (ApiException $e) {
             $this->fail(sprintf('[ApiException %d] %s', $e->getCode(), $e->getMessage()));
