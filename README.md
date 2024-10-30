@@ -7,41 +7,6 @@ LibreDTE: Cliente de API en PHP
 
 Cliente para realizar la integración con los servicios web de [LibreDTE](https://www.libredte.cl) desde PHP.
 
-Instalación
------------
-
-Ejecutar en la terminal:
-
-```shell
-composer require libredte/libredte-api-client
-```
-
-Documentación (dev)
--------------------
-
-Para crear la documentación se necesita tener instaladas las dependencias
-de composer, GraphViz en el sistema operativo y luego ejecutar:
-
-```shell
-./vendor/bin/phpdoc -d ./src -t ./docs
-```
-
-Pruebas unitarias (dev)
------------------------
-
-Para ejecutar las pruebas unitarias se necesita tener instaladas las
-dependencias de composer y luego ejecutar:
-
-```shell
-./vendor/bin/phpunit
-```
-
-También es posible ejecutar una pruebas específica indicando el test. Ejemplo:
-
-```shell
-./vendor/bin/phpunit --filter test_dte_facturar
-```
-
 Licencia
 --------
 
