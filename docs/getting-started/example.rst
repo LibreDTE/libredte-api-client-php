@@ -36,9 +36,11 @@ El siguiente es un ejemplo básico de cómo obtener un documento DTE emitido usa
     } else {
         $documentos = $response['body'];
         $dte_id = 'T'.$documentos[0]['dte'].'F'.$documentos[0]['folio'];
-        echo "\n",'test_dte_buscar_documento_emitido() n_documentos ',count($documentos),"\n";
-        echo "\n",'test_dte_buscar_documento_emitido() dte_id ',$dte_id,"\n";
-        echo "\n",'test_dte_buscar_documento_emitido() dte_fecha ',$documentos[0]['fecha'],"\n";
+
+        echo "\nDTEs Temporales: \n";
+        echo "\n",'N DOCUMENTOS: ',count($documentos),"\n";
+        echo "\n",'DTE ID: ',$dte_id,"\n";
+        echo "\n",'DTE FECHA: ',$documentos[0]['fecha'],"\n";
     }
 
 Desgloce de ejemplo
