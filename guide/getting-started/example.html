@@ -134,50 +134,8 @@
                                         <section class="section " id="ejemplo">
             <h1>Ejemplo</h1>
 
-            
-    <p>El siguiente es un ejemplo básico de cómo obtener un documento DTE emitido usando el cliente de API de LibreDTE:</p>
-
-            <pre><code class="language-php">&lt;?php
-
-# Definición de directorio autoload. Necesario si se usa la versión de GitHub.
-require_once __DIR__ . &#039;/vendor/autoload.php&#039;;
-
-# Importación de biblioteca de LibreDTE
-use libredte\api_client\ApiClient;
-
-# Instanciación de cliente de API
-$client = new ApiClient();
-
-# RUT del emisor sin Dígito Verificador.
-$emisor_rut = 12345678;
-# Filtros a aplicar en la búsqueda de DTEs.
-$filtros = [
-    &#039;fecha_desde&#039; =&gt; &#039;2024-10-25&#039;,
-    &#039;fecha_hasta&#039; =&gt; date(&#039;Y-m-d&#039;),
-];
-
-# Recurso a consumir.
-$resource = sprintf(&#039;/dte/dte_tmps/buscar/%d&#039;, $emisor_rut);
-
-# Se efectua la solicitud HTTP y se guarda la respuesta. En esta variable están el estado, cuerpo, etc.
-$response = $client-&gt;post($resource, $filtros);
-
-echo &quot;Status: &quot;.$response[&#039;status&#039;][&#039;code&#039;].&quot;\n&quot;;
-
-if ($response[&#039;status&#039;][&#039;code&#039;] != 200) {
-    echo $response[&#039;body&#039;].&quot;\n&quot;;
-} else {
-    $documentos = $response[&#039;body&#039;];
-    $dte_id = &#039;T&#039;.$documentos[0][&#039;dte&#039;].&#039;F&#039;.$documentos[0][&#039;folio&#039;];
-
-    echo &quot;\nDTEs Temporales: \n&quot;;
-    echo &quot;\n&quot;,&#039;N DOCUMENTOS: &#039;,count($documentos),&quot;\n&quot;;
-    echo &quot;\n&quot;,&#039;DTE ID: &#039;,$dte_id,&quot;\n&quot;;
-    echo &quot;\n&quot;,&#039;DTE FECHA: &#039;,$documentos[0][&#039;fecha&#039;],&quot;\n&quot;;
-}</code></pre>
-
-            <section class="section " id="desgloce-de-ejemplo">
-            <h2>Desgloce de ejemplo</h2>
+            <section class="section " id="ejemplo-de-generar-un-dte-temporal">
+            <h2>Ejemplo de Generar un DTE temporal</h2>
 
             
     <p>Antes de probar, integrar y/o utilizar el cliente de API, necesitas haber definido previamente las variables de entorno.</p>
@@ -192,66 +150,73 @@ if ($response[&#039;status&#039;][&#039;code&#039;] != 200) {
 </div>
 
             
-    <p>Se empieza por importar e instanciar el cliente de API.</p>
+    <p>El siguiente es un ejemplo básico de cómo emitir un DTE usando el cliente de API de LibreDTE:</p>
 
-            <pre><code class="language-php"># Definición de directorio autoload. Necesario si se usa la versión de GitHub.
+            <pre><code class="language-php">&lt;?php
+
+# Definición de directorio autoload. Necesario si se usa la versión de GitHub.
 require_once __DIR__ . &#039;/vendor/autoload.php&#039;;
 
 # Importación de biblioteca de LibreDTE
 use libredte\api_client\ApiClient;
 
 # Instanciación de cliente de API
-$client = new ApiClient();</code></pre>
+$client = new ApiClient();
+# RUT del emisor, con DV.
+$emisor_rut = &#039;12345678-9&#039;;
 
-            
-    <p>Luego, se definen las variables a utilizar.</p>
+# Datos del DTE temporal a crear.
+$datos = [
+    &#039;Encabezado&#039; =&gt; [
+        &#039;IdDoc&#039; =&gt; [
+            &#039;TipoDTE&#039; =&gt; 33,
+        ],
+        &#039;Emisor&#039; =&gt; [
+            &#039;RUTEmisor&#039; =&gt; $emisor_rut,
+        ],
+        &#039;Receptor&#039; =&gt; [
+            &#039;RUTRecep&#039; =&gt; &#039;60803000-K&#039;,
+            &#039;RznSocRecep&#039; =&gt; &#039;Servicio de Impuestos Internos (SII)&#039;,
+            &#039;GiroRecep&#039; =&gt; &#039;Administración Pública&#039;,
+            &#039;Contacto&#039; =&gt; &#039;+56 2 3252 5575&#039;,
+            &#039;CorreoRecep&#039; =&gt; &#039;facturacionmipyme@sii.cl&#039;,
+            &#039;DirRecep&#039; =&gt; &#039;Teatinos 120&#039;,
+            &#039;CmnaRecep&#039; =&gt; &#039;Santiago&#039;,
+        ],
+    ],
+    &#039;Detalle&#039; =&gt; [
+        [
+            //&#039;IndExe&#039; =&gt; 1, // para items exentos
+            &#039;NmbItem&#039; =&gt; &#039;Asesoría de LibreDTE&#039;,
+            &#039;QtyItem&#039; =&gt; 1,
+            &#039;PrcItem&#039; =&gt; 1000,
+        ],
+    ],
+    &#039;Referencia&#039; =&gt; [
+        [
+            &#039;TpoDocRef&#039; =&gt; 801,
+            &#039;FolioRef&#039; =&gt; &#039;OC123&#039;,
+            &#039;FchRef&#039; =&gt; &#039;2015-10-01&#039;,
+        ]
+    ],
+];
 
-            <pre><code class="language-php"># RUT del emisor sin Dígito Verificador.
-$emisor_rut = 12345678;
-# Filtros a aplicar en la búsqueda de DTEs.
-$filtros = [
-    &#039;fecha_desde&#039; =&gt; &#039;2015-01-01&#039;,
-    &#039;fecha_hasta&#039; =&gt; date(&#039;Y-m-d&#039;),
-];</code></pre>
-
-            
-    <p>Más adelante, se arma el recurso a utilizar, se consume, y se obtiene su respuesta HTTP.</p>
-
-            <pre><code class="language-php"># Recurso a consumir.
-$resource = sprintf(&#039;/dte/dte_tmps/buscar/%d&#039;, $emisor_rut);
+# Recurso a consumir.
+$resource = &#039;/dte/documentos/emitir&#039;;
 
 # Se efectua la solicitud HTTP y se guarda la respuesta.
-$response = $client-&gt;post($resource, $filtros);</code></pre>
+$response = $client-&gt;post($resource, $datos);
 
-            
-    <p><code>$response</code>
- contiene toda la información de la respuesta HTTP, desde el cuerpo hasta el código de estado.</p>
+# Código del response
+echo &quot;Status: &quot;.$response[&#039;status&#039;][&#039;code&#039;].&quot;\n&quot;;
 
-            
-    <p>Por último, se despliega en consola el resultado. Si el código de la respuesta HTTP no es 200, se mostrará el mensaje de error. Si es 200, se desplegarán los documentos consultados.</p>
-
-            <pre><code class="language-php">echo &quot;Status: &quot;.$response[&#039;status&#039;][&#039;code&#039;].&quot;\n&quot;;
-
+# Despliegue del body.
 if ($response[&#039;status&#039;][&#039;code&#039;] != 200) {
-    echo $response[&#039;body&#039;].&quot;\n&quot;;
+    echo $response[&#039;body&#039;].&quot;\n&quot;; # Si falla, el body contendrá el mensaje de error.
 } else {
-    $documentos = $response[&#039;body&#039;];
-    $dte_id = &#039;T&#039;.$documentos[0][&#039;dte&#039;].&#039;F&#039;.$documentos[0][&#039;folio&#039;];
-
     echo &quot;\nDTEs Temporales: \n&quot;;
-    echo &quot;\n&quot;,&#039;N DOCUMENTOS: &#039;,count($documentos),&quot;\n&quot;;
-    echo &quot;\n&quot;,&#039;DTE ID: &#039;,$dte_id,&quot;\n&quot;;
-    echo &quot;\n&quot;,&#039;DTE FECHA: &#039;,$documentos[0][&#039;fecha&#039;],&quot;\n&quot;;
+    echo &quot;\n&quot;,&#039;FACTURAR DTE TEMP: &#039;,json_encode($response[&#039;body&#039;]),&quot;\n&quot;;
 }</code></pre>
-
-            <div class="phpdocumentor-admonition important">
-        <svg class="phpdocumentor-admonition__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        <article>
-        
-    <p>Este ejemplo solo funciona con DTEs temporales.</p>
-
-    </article>
-</div>
 
             <div class="phpdocumentor-admonition seealso">
                         <svg class="phpdocumentor-admonition__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
