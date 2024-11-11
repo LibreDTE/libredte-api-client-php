@@ -1,7 +1,44 @@
-<phpunit bootstrap="tests/bootstrap.php" colors="true" verbose="true">
+<phpunit
+    backupGlobals="true"
+    bootstrap="tests/bootstrap.php"
+    cacheDirectory="var/cache/phpunit"
+    processIsolation="true"
+    executionOrder="depends,defects"
+    colors="true"
+    testdox="true"
+    verbose="true"
+    requireCoverageMetadata="true"
+    beStrictAboutCoverageMetadata="true"
+    beStrictAboutOutputDuringTests="false"
+    beStrictAboutChangesToGlobalState="true"
+    stopOnError="true"
+    stopOnFailure="true"
+    stopOnWarning="true"
+    stopOnDeprecation="true"
+    stopOnNotice="true"
+    failOnEmptyTestSuite="true"
+    failOnWarning="true"
+    failOnRisky="true"
+    failOnDeprecation="true"
+    failOnPhpunitDeprecation="true"
+    failOnNotice="true"
+>
     <testsuites>
         <testsuite name="LibreDTE: Cliente de API en PHP - Pruebas Unitarias.">
             <directory>tests</directory>
+        </testsuite>
+        <testsuite name="dte">
+            <directory>tests/dte_facturacion</directory>
+        </testsuite>
+        <testsuite name="contab">
+            <directory>tests/lce_contabilidad</directory>
+        </testsuite>
+        <testsuite name="pagos">
+            <directory>tests/pagos_cobros_masivos</directory>
+        </testsuite>
+        <testsuite name="readonly">
+            <file>tests/dte_facturacion/BuscarDocumentoEmitidoTest.php</file>
+            <file>tests/pagos_cobros_masivos/BuscarCobroTest.php</file>
         </testsuite>
     </testsuites>
     <filter>
@@ -9,4 +46,9 @@
             <directory suffix=".php">src</directory>
         </whitelist>
     </filter>
+    <php>
+        <ini name="memory_limit" value="-1" />
+        <env name="LIBREDTE_URL" value="https://apigateway.cl" />
+        <env name="LIBREDTE_RUT" value="76192083-9" />
+    </php>
 </phpunit>

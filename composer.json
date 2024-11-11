@@ -31,5 +31,13 @@
     },
     "autoload": {
         "psr-4": {"libredte\\api_client\\": "src/"}
+    },
+    "scripts": {
+        "docs": "php tools/phpdocumentor run --config=phpdoc.xml",
+        "tests": "XDEBUG_MODE=coverage vendor/bin/phpunit --configuration=phpunit.xml",
+        "tests_dte": "vendor/bin/phpunit --configuration=phpunit.xml --no-coverage --testsuite dte",
+        "tests_contab": "vendor/bin/phpunit --configuration=phpunit.xml --no-coverage --testsuite contab",
+        "tests_pagos": "vendor/bin/phpunit --configuration=phpunit.xml --no-coverage --testsuite pagos",
+        "tests_readonly": "vendor/bin/phpunit --testsuite readonly --filter 'test_dte_buscar_documento_emitido|test_dte_estado|test_dte_consultar|test_dte_ted|test_pagos_buscar_cobro|test_pagos_info_cobro'"
     }
 }

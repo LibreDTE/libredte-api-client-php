@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master  # Ejecuta pruebas al hacer push en la rama 'master'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php-version: ['7.3', '8.0']  # Puedes cambiar las versiones según necesites
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+
+      - name: Setup PHP ${{ matrix.php-version }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}  # Configura la versión de PHP desde la matriz
+          extensions: curl, mbstring, intl, xdebug  # Instala extensiones de PHP si es necesario
+          toos: composer
+
+      - name: Install Composer dependencies
+        run: composer install --no-progress --no-suggest
+
+      - name: Create temporary env file
+        run: |
+          echo "LIBREDTE_HASH=${{ secrets.LIBREDTE_HASH }}" >> tests/test.env
+          echo "LIBREDTE_RUT=${{ secrets.LIBREDTE_RUT }}" >> tests/test.env
+      
+      - name: Run PHP tests read only
+        run: |
+          composer tests_readonly
+
+      - name: Upload PHPUnit result report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tests-testdox-php_${{ matrix.php-version }}.txt
+          path: var/tests-testdox.txt
+
+      - name: Display PHP version
+        run: php -v

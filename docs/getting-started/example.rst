@@ -1,7 +1,15 @@
 Ejemplo
 =======
 
-El siguiente es un ejemplo básico de cómo obtener un documento DTE emitido usando el cliente de API de LibreDTE:
+Ejemplo de Generar un DTE temporal
+-------------------------------
+
+Antes de probar, integrar y/o utilizar el cliente de API, necesitas haber definido previamente las variables de entorno.
+
+.. seealso::
+    Para más información sobre este paso, referirse al la guía en Configuración.
+
+El siguiente es un ejemplo básico de cómo emitir un DTE usando el cliente de API de LibreDTE:
 
 .. code-block:: php
     <?php
@@ -14,97 +22,61 @@ El siguiente es un ejemplo básico de cómo obtener un documento DTE emitido usa
 
     # Instanciación de cliente de API
     $client = new ApiClient();
+    # RUT del emisor, con DV.
+    $emisor_rut = '12345678-9';
 
-    # RUT del emisor sin Dígito Verificador.
-    $emisor_rut = 12345678;
-    # Filtros a aplicar en la búsqueda de DTEs.
-    $filtros = [
-        'fecha_desde' => '2024-10-25',
-        'fecha_hasta' => date('Y-m-d'),
+    # Datos del DTE temporal a crear.
+    $datos = [
+        'Encabezado' => [
+            'IdDoc' => [
+                'TipoDTE' => 33,
+            ],
+            'Emisor' => [
+                'RUTEmisor' => $emisor_rut,
+            ],
+            'Receptor' => [
+                'RUTRecep' => '60803000-K',
+                'RznSocRecep' => 'Servicio de Impuestos Internos (SII)',
+                'GiroRecep' => 'Administración Pública',
+                'Contacto' => '+56 2 3252 5575',
+                'CorreoRecep' => 'facturacionmipyme@sii.cl',
+                'DirRecep' => 'Teatinos 120',
+                'CmnaRecep' => 'Santiago',
+            ],
+        ],
+        'Detalle' => [
+            [
+                //'IndExe' => 1, // para items exentos
+                'NmbItem' => 'Asesoría de LibreDTE',
+                'QtyItem' => 1,
+                'PrcItem' => 1000,
+            ],
+        ],
+        'Referencia' => [
+            [
+                'TpoDocRef' => 801,
+                'FolioRef' => 'OC123',
+                'FchRef' => '2015-10-01',
+            ]
+        ],
     ];
 
     # Recurso a consumir.
-    $resource = sprintf('/dte/dte_tmps/buscar/%d', $emisor_rut);
-
-    # Se efectua la solicitud HTTP y se guarda la respuesta. En esta variable están el estado, cuerpo, etc.
-    $response = $client->post($resource, $filtros);
-
-    echo "Status: ".$response['status']['code']."\n";
-
-    if ($response['status']['code'] != 200) {
-        echo $response['body']."\n";
-    } else {
-        $documentos = $response['body'];
-        $dte_id = 'T'.$documentos[0]['dte'].'F'.$documentos[0]['folio'];
-
-        echo "\nDTEs Temporales: \n";
-        echo "\n",'N DOCUMENTOS: ',count($documentos),"\n";
-        echo "\n",'DTE ID: ',$dte_id,"\n";
-        echo "\n",'DTE FECHA: ',$documentos[0]['fecha'],"\n";
-    }
-
-Desgloce de ejemplo
--------------------
-
-Antes de probar, integrar y/o utilizar el cliente de API, necesitas haber definido previamente las variables de entorno.
-
-.. seealso::
-    Para más información sobre este paso, referirse al la guía en Configuración.
-
-Se empieza por importar e instanciar el cliente de API.
-
-.. code-block:: php
-    # Definición de directorio autoload. Necesario si se usa la versión de GitHub.
-    require_once __DIR__ . '/vendor/autoload.php';
-
-    # Importación de biblioteca de LibreDTE
-    use libredte\api_client\ApiClient;
-
-    # Instanciación de cliente de API
-    $client = new ApiClient();
-
-Luego, se definen las variables a utilizar.
-
-.. code-block:: php
-    # RUT del emisor sin Dígito Verificador.
-    $emisor_rut = 12345678;
-    # Filtros a aplicar en la búsqueda de DTEs.
-    $filtros = [
-        'fecha_desde' => '2015-01-01',
-        'fecha_hasta' => date('Y-m-d'),
-    ];
-
-Más adelante, se arma el recurso a utilizar, se consume, y se obtiene su respuesta HTTP.
-
-.. code-block:: php
-    # Recurso a consumir.
-    $resource = sprintf('/dte/dte_tmps/buscar/%d', $emisor_rut);
+    $resource = '/dte/documentos/emitir';
 
     # Se efectua la solicitud HTTP y se guarda la respuesta.
-    $response = $client->post($resource, $filtros);
+    $response = $client->post($resource, $datos);
 
-``$response`` contiene toda la información de la respuesta HTTP, desde el cuerpo hasta el código de estado.
-
-Por último, se despliega en consola el resultado. Si el código de la respuesta HTTP no es 200, se mostrará el mensaje de error. Si es 200, se desplegarán los documentos consultados.
-
-.. code-block:: php
+    # Código del response
     echo "Status: ".$response['status']['code']."\n";
 
+    # Despliegue del body.
     if ($response['status']['code'] != 200) {
-        echo $response['body']."\n";
+        echo $response['body']."\n"; # Si falla, el body contendrá el mensaje de error.
     } else {
-        $documentos = $response['body'];
-        $dte_id = 'T'.$documentos[0]['dte'].'F'.$documentos[0]['folio'];
-
         echo "\nDTEs Temporales: \n";
-        echo "\n",'N DOCUMENTOS: ',count($documentos),"\n";
-        echo "\n",'DTE ID: ',$dte_id,"\n";
-        echo "\n",'DTE FECHA: ',$documentos[0]['fecha'],"\n";
+        echo "\n",'FACTURAR DTE TEMP: ',json_encode($response['body']),"\n";
     }
-
-.. important::
-    Este ejemplo solo funciona con DTEs temporales.
-
 
 .. seealso::
     Para saber más sobre los parámetros posibles y el cómo consumir las API, referirse a la `documentación de LibreDTE. <https://developers.libredte.cl/>`_
