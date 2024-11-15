@@ -21,20 +21,25 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-version }}  # Configura la versión de PHP desde la matriz
-          extensions: curl, mbstring, intl, xdebug  # Instala extensiones de PHP si es necesario
+          extensions: curl, mbstring, intl, xdebug
           toos: composer
 
       - name: Install Composer dependencies
         run: composer install --no-progress --no-suggest
 
+      # No hay forma de reemplazar esto por la opción enviada en correo
       - name: Create temporary env file
         run: |
           echo "LIBREDTE_HASH=${{ secrets.LIBREDTE_HASH }}" >> tests/test.env
-          echo "LIBREDTE_RUT=${{ secrets.LIBREDTE_RUT }}" >> tests/test.env
-      
+          echo "LIBREDTE_RUT=${{ vars.LIBREDTE_RUT }}" >> tests/test.env
+
       - name: Run PHP tests read only
         run: |
           composer tests_readonly
+
+      - name: Run PHP tests dte temp
+        run: |
+          composer tests_dte_temp
 
       - name: Upload PHPUnit result report
         if: failure()

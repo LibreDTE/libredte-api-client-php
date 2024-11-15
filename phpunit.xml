@@ -39,6 +39,10 @@
         <testsuite name="readonly">
             <file>tests/dte_facturacion/BuscarDocumentoEmitidoTest.php</file>
             <file>tests/pagos_cobros_masivos/BuscarCobroTest.php</file>
+        </testsuite name="dte_temp">
+            <file>tests/dte_facturacion/EmitirDteTemporalTest.php</file>
+        <testsuite>
+
         </testsuite>
     </testsuites>
     <filter>
