@@ -3,9 +3,26 @@ name: CI
 on:
   push:
     branches:
-      - master  # Ejecuta pruebas al hacer push en la rama 'master'
+      - main  # Ejecuta pruebas al hacer push en la rama 'master'
+env:
+  env_var: ${{ vars.ENV_CONTEXT_VAR }}
 
 jobs:
+  display-variables:
+    name: ${{ vars.JOB_NAME }}
+    # You can use configuration variables with the `vars` context for dynamic jobs
+    if: ${{ vars.USE_VARIABLES == 'true' }}
+    runs-on: ${{ vars.RUNNER }}
+    environment: ${{ vars.ENVIRONMENT_STAGE }}
+    steps:
+    - name: Use variables
+      run: |
+        echo "LIBREDTE_HASH : $LIBREDTE_HASH"
+        echo "LIBREDTE_RUT : $LIBREDTE_RUT"
+      env:
+        LIBREDTE_HASH: ${{ secrets.LIBREDTE_HASH }}
+        LIBREDTE_RUT: ${{ vars.LIBREDTE_RUT }}
+
   test:
     runs-on: ubuntu-latest
 
@@ -22,22 +39,15 @@ jobs:
         with:
           php-version: ${{ matrix.php-version }}  # Configura la versión de PHP desde la matriz
           extensions: curl, mbstring, intl, xdebug
-          toos: composer
+          tools: composer
 
       - name: Install Composer dependencies
         run: composer install --no-progress --no-suggest
 
-      # No hay forma de reemplazar esto por la opción enviada en correo
-      - name: Create temporary env file
-        run: |
-          echo "LIBREDTE_HASH=${{ secrets.LIBREDTE_HASH }}" >> tests/test.env
-          echo "LIBREDTE_RUT=${{ vars.LIBREDTE_RUT }}" >> tests/test.env
-
-      - name: Run PHP tests read only
-        run: |
-          composer tests_readonly
-
       - name: Run PHP tests dte temp
+        env:
+          LIBREDTE_HASH: ${{ secrets.LIBREDTE_HASH }}
+          LIBREDTE_RUT: ${{ vars.LIBREDTE_RUT }}
         run: |
           composer tests_dte_temp
 

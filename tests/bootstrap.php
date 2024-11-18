@@ -25,14 +25,16 @@ date_default_timezone_set('America/Santiago');
 // dependencias de composer
 require_once __DIR__ . '/../vendor/autoload.php';
 
-// cargar variables de entorno
-$dotenv = \Dotenv\Dotenv::createMutable(__DIR__, 'test.env');
-try {
-    $dotenv->load();
-} catch (\Dotenv\Exception\InvalidPathException $e) {
-    die($e->getMessage());
-} catch (\Dotenv\Exception\InvalidFileException $e) {
-    die($e->getMessage());
+// cargar variables de entorno (según si test.env existe o no).
+if (file_exists(__DIR__ . '/test.env')) {
+    $dotenv = \Dotenv\Dotenv::createMutable(__DIR__, 'test.env');
+    try {
+        $dotenv->load();
+    } catch (\Dotenv\Exception\InvalidPathException $e) {
+        die($e->getMessage());
+    } catch (\Dotenv\Exception\InvalidFileException $e) {
+        die($e->getMessage());
+    }
 }
 
 /**
