@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-      - main  # Ejecuta pruebas al hacer push en la rama 'master'
+      - master  # Ejecuta pruebas al hacer push en la rama 'master'
 env:
   env_var: ${{ vars.ENV_CONTEXT_VAR }}
 
