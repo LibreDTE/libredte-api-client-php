@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * LibreDTE: Cliente de API en PHP.
  * Copyright (C) LibreDTE <https://www.libredte.cl>
@@ -29,7 +31,6 @@ namespace libredte\api_client;
  */
 class HttpCurlClient
 {
-
     /**
      * Indica si se debe validar el certificado SSL del servidor.
      *
@@ -66,7 +67,7 @@ class HttpCurlClient
      */
     public function getLastError()
     {
-        return $this->errors[count($this->errors)-1];
+        return $this->errors[count($this->errors) - 1];
     }
 
     /**
@@ -181,11 +182,11 @@ class HttpCurlClient
                 $key = 0;
                 $value = $linea;
             }
-            $key = trim($key);
+            $key = trim(strval($key));
             $value = trim($value);
             if (!isset($headers[$key])) {
                 $headers[$key] = $value;
-            } else if (!is_array($headers[$key])) {
+            } elseif (!is_array($headers[$key])) {
                 $aux = $headers[$key];
                 $headers[$key] = [$aux, $value];
             } else {
@@ -207,7 +208,7 @@ class HttpCurlClient
     private function parseResponseStatus($response_line)
     {
         if (is_array($response_line)) {
-            $response_line = $response_line[count($response_line)-1];
+            $response_line = $response_line[count($response_line) - 1];
         }
         $parts = explode(' ', $response_line, 3);
         return [
@@ -216,5 +217,4 @@ class HttpCurlClient
             'message' => !empty($parts[2]) ? $parts[2] : null,
         ];
     }
-
 }

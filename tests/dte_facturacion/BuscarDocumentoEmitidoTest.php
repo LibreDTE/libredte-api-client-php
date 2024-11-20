@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * LibreDTE: Cliente de API en PHP - Pruebas Unitarias.
  * Copyright (C) LibreDTE <https://www.libredte.cl>
@@ -19,16 +21,22 @@
  * <http://www.gnu.org/licenses/lgpl.html>.
  */
 
-use PHPUnit\Framework\TestCase;
 use libredte\api_client\ApiClient;
 use libredte\api_client\ApiException;
+use libredte\api_client\HttpCurlClient;
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
+#[CoversClass(ApiClient::class)]
+#[CoversClass(HttpCurlClient::class)]
 class BuscarDocumentoEmitidoTest extends TestCase
 {
-
     protected static $verbose;
+
     protected static $client;
+
     protected static $emisor_rut;
+
     protected static $email;
 
     public static function setUpBeforeClass(): void
@@ -47,8 +55,8 @@ class BuscarDocumentoEmitidoTest extends TestCase
         ];
         $resource = sprintf('/dte/dte_emitidos/buscar/%d', self::$emisor_rut);
         $response = self::$client->post($resource, $filtros);
-        if ($response['status']['code'] != 200) {
-            throw new ApiException($response['body'], $response['status']['code']);
+        if ($response['status']['code'] != '200') {
+            throw new ApiException($response['body'], (int)$response['status']['code']);
         }
         return $response['body'];
     }
@@ -80,10 +88,10 @@ class BuscarDocumentoEmitidoTest extends TestCase
                 self::$emisor_rut
             );
             $response = self::$client->get($resource);
-            if ($response['status']['code'] != 200) {
-                throw new ApiException($response['body'], $response['status']['code']);
+            if ($response['status']['code'] != '200') {
+                throw new ApiException($response['body'], (int)$response['status']['code']);
             }
-            $this->assertEquals(200, $response['status']['code']);
+            $this->AssertSame('200', $response['status']['code']);
             if (self::$verbose) {
                 $dte_id = 'T'.$documentos[0]['dte'].'F'.$documentos[0]['folio'];
                 echo "\n",'test_dte_estado() dte_id ',$dte_id,"\n";
@@ -106,10 +114,10 @@ class BuscarDocumentoEmitidoTest extends TestCase
                 'total' => $documentos[0]['total'],
             ];
             $response = self::$client->post('/dte/dte_emitidos/consultar', $filtros);
-            if ($response['status']['code'] != 200) {
-                throw new ApiException($response['body'], $response['status']['code']);
+            if ($response['status']['code'] != '200') {
+                throw new ApiException($response['body'], (int)$response['status']['code']);
             }
-            $this->assertEquals(200, $response['status']['code']);
+            $this->AssertSame('200', $response['status']['code']);
             if (self::$verbose) {
                 $dte_id = 'T'.$documentos[0]['dte'].'F'.$documentos[0]['folio'];
                 echo "\n",'test_dte_consultar() dte_id ',$dte_id,"\n";
@@ -132,10 +140,10 @@ class BuscarDocumentoEmitidoTest extends TestCase
                 'xml' // png (defecto), bmp o xml
             );
             $response = self::$client->get($resource);
-            if ($response['status']['code'] != 200) {
-                throw new ApiException($response['body'], $response['status']['code']);
+            if ($response['status']['code'] != '200') {
+                throw new ApiException($response['body'], (int)$response['status']['code']);
             }
-            $this->assertEquals(200, $response['status']['code']);
+            $this->AssertSame('200', $response['status']['code']);
             if (self::$verbose) {
                 $dte_id = 'T'.$documentos[0]['dte'].'F'.$documentos[0]['folio'];
                 echo "\n",'test_dte_ted() dte_id ',$dte_id,"\n";
@@ -175,10 +183,10 @@ class BuscarDocumentoEmitidoTest extends TestCase
                 'papelContinuo' => false,
             ];
             $response = self::$client->post($resource, $datos_email);
-            if ($response['status']['code'] != 200) {
-                throw new ApiException($response['body'], $response['status']['code']);
+            if ($response['status']['code'] != '200') {
+                throw new ApiException($response['body'], (int)$response['status']['code']);
             }
-            $this->assertEquals(200, $response['status']['code']);
+            $this->AssertSame('200', $response['status']['code']);
             if (self::$verbose) {
                 $dte_id = 'T'.$documentos[0]['dte'].'F'.$documentos[0]['folio'];
                 echo "\n",'test_dte_email() dte_id ',$dte_id,"\n";
@@ -188,5 +196,4 @@ class BuscarDocumentoEmitidoTest extends TestCase
             $this->fail(sprintf('[ApiException %d] %s', $e->getCode(), $e->getMessage()));
         }
     }
-
 }

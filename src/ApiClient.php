@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * LibreDTE: Cliente de API en PHP.
  * Copyright (C) LibreDTE <https://www.libredte.cl>
@@ -29,7 +31,6 @@ namespace libredte\api_client;
  */
 class ApiClient
 {
-
     /**
      * La URL base de la API de LibreDTE.
      *
@@ -167,5 +168,4 @@ class ApiClient
     {
         return function_exists('env') ? env($name) : getenv($name);
     }
-
 }

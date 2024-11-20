@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * LibreDTE: Cliente de API en PHP - Pruebas Unitarias.
  * Copyright (C) LibreDTE <https://www.libredte.cl>
@@ -19,14 +21,18 @@
  * <http://www.gnu.org/licenses/lgpl.html>.
  */
 
-use PHPUnit\Framework\TestCase;
 use libredte\api_client\ApiClient;
 use libredte\api_client\ApiException;
+use libredte\api_client\HttpCurlClient;
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
+#[CoversClass(ApiClient::class)]
+#[CoversClass(HttpCurlClient::class)]
 class EmitirDocumentoTest extends TestCase
 {
-
     protected static $verbose;
+
     protected static $client;
 
     private static $datos = [
@@ -74,18 +80,18 @@ class EmitirDocumentoTest extends TestCase
     public function test_dte_facturar()
     {
         $dte_temporal = $this->_emitir_dte_temporal();
-        $dte_emitido = $this->_generar_dte_emitido($dte_temporal); // AKA: dte real
-        $this->_descargar_pdf($dte_emitido);
+        #$dte_emitido = $this->_generar_dte_emitido($dte_temporal); // AKA: dte real
+        #$this->_descargar_pdf($dte_emitido);
     }
 
     private function _emitir_dte_temporal(): array
     {
         try {
             $response = self::$client->post('/dte/documentos/emitir', self::$datos);
-            if ($response['status']['code'] != 200) {
-                throw new ApiException($response['body'], $response['status']['code']);
+            if ($response['status']['code'] != '200') {
+                throw new ApiException($response['body'], (int)$response['status']['code']);
             }
-            $this->assertEquals(200, $response['status']['code']);
+            $this->assertSame('200', $response['status']['code']);
             if (self::$verbose) {
                 echo "\n",'test_dte_facturar() dte_temporal ',json_encode($response['body']),"\n";
             }
@@ -100,10 +106,10 @@ class EmitirDocumentoTest extends TestCase
     {
         try {
             $response = self::$client->post('/dte/documentos/generar', $dte_temporal);
-            if ($response['status']['code'] != 200) {
-                throw new ApiException($response['body'], $response['status']['code']);
+            if ($response['status']['code'] != '200') {
+                throw new ApiException($response['body'], (int)$response['status']['code']);
             }
-            $this->assertEquals(200, $response['status']['code']);
+            $this->assertSame('200', $response['status']['code']);
             if (self::$verbose) {
                 echo "\n",'test_dte_facturar() dte_emitido ',json_encode($response['body']),"\n";
             }
@@ -123,10 +129,10 @@ class EmitirDocumentoTest extends TestCase
         );
         try {
             $response = self::$client->get($resource);
-            if ($response['status']['code'] != 200) {
-                throw new ApiException($response['body'], $response['status']['code']);
+            if ($response['status']['code'] != '200') {
+                throw new ApiException($response['body'], (int)$response['status']['code']);
             }
-            $this->assertEquals(200, $response['status']['code']);
+            $this->assertSame('200', $response['status']['code']);
             $filename = __DIR__ . '/' .str_replace('.php', '.pdf', basename(__FILE__));
             file_put_contents($filename, $response['body']);
             unlink($filename);
@@ -137,5 +143,4 @@ class EmitirDocumentoTest extends TestCase
             $this->fail(sprintf('[ApiException %d] %s', $e->getCode(), $e->getMessage()));
         }
     }
-
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * LibreDTE: Cliente de API en PHP - Pruebas Unitarias.
  * Copyright (C) LibreDTE <https://www.libredte.cl>
@@ -19,15 +21,21 @@
  * <http://www.gnu.org/licenses/lgpl.html>.
  */
 
-use PHPUnit\Framework\TestCase;
 use libredte\api_client\ApiClient;
 use libredte\api_client\ApiException;
+use libredte\api_client\HttpCurlClient;
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
+#[CoversClass(ApiClient::class)]
+#[CoversClass(HttpCurlClient::class)]
 class EmitirDteTemporalTest extends TestCase
 {
     # TODO: Revisar código de testing de DTE Temporal.
     protected static $verbose;
+
     protected static $client;
+
     protected static $emisor_rut;
 
     private static $datos = [
@@ -61,14 +69,14 @@ class EmitirDteTemporalTest extends TestCase
                 'TpoDocRef' => 801,
                 'FolioRef' => 'OC123',
                 'FchRef' => '2015-10-01',
-            ]
+            ],
         ],
     ];
 
     public static function setUpBeforeClass(): void
     {
         self::$verbose = env('TEST_VERBOSE', false);
-        self::$emisor_rut = (int)(explode('-', (string)env('LIBREDTE_RUT'))[0]);
+        self::$emisor_rut = (explode('-', (string)env('LIBREDTE_RUT'))[0]);
         self::$datos['Encabezado']['Emisor']['RUTEmisor'] = env('LIBREDTE_RUT');
         self::$client = new ApiClient();
     }
@@ -82,7 +90,7 @@ class EmitirDteTemporalTest extends TestCase
         $resource = sprintf('/dte/dte_tmps/buscar/%d', self::$emisor_rut);
         $response = self::$client->post($resource, $filtros);
         if ($response['status']['code'] != 200) {
-            throw new ApiException($response['body'], $response['status']['code']);
+            throw new ApiException($response['body'], (int)$response['status']['code']);
         }
         return $response['body'];
     }
@@ -92,11 +100,8 @@ class EmitirDteTemporalTest extends TestCase
         $lista_dtes = $this->_buscar_temps();
         if (self::$verbose) {
             echo "\n"."test_dte_buscar_temps()\n";
-            foreach($lista_dtes as $dte){
+            foreach ($lista_dtes as $dte) {
                 echo "DTE: ".'T'.$dte['dte'].'F'.$dte['codigo']."\n";
-                #foreach($dte as $clave => $valor){
-                #    echo $clave." : ".$valor."\n";
-                #}
             }
         }
         $dte_temporal = $this->_emitir_dte_temporal();
@@ -111,7 +116,7 @@ class EmitirDteTemporalTest extends TestCase
     {
         try {
             $documento = $lista_dte[0];
-            
+
             $resource = sprintf(
                 '/dte/dte_tmps/info/%d/%d/%s/%d',
                 $documento['receptor'],
@@ -139,10 +144,10 @@ class EmitirDteTemporalTest extends TestCase
     {
         try {
             $response = self::$client->post('/dte/documentos/emitir', self::$datos);
-            if ($response['status']['code'] != 200) {
-                throw new ApiException($response['body'], $response['status']['code']);
+            if ($response['status']['code'] != '200') {
+                throw new ApiException($response['body'], (int)$response['status']['code']);
             }
-            $this->assertEquals(200, $response['status']['code']);
+            $this->assertSame('200', $response['status']['code']);
             if (self::$verbose) {
                 echo "\n",'test_dte_temp() emitir_dte_temporal ',json_encode($response['body']),"\n";
             }
@@ -163,10 +168,10 @@ class EmitirDteTemporalTest extends TestCase
         );
         try {
             $response = self::$client->get($resource);
-            if ($response['status']['code'] != 200) {
-                throw new ApiException($response['body'], $response['status']['code']);
+            if ($response['status']['code'] != '200') {
+                throw new ApiException($response['body'], (int)$response['status']['code']);
             }
-            $this->assertEquals(200, $response['status']['code']);
+            $this->assertSame('200', $response['status']['code']);
             $filename = __DIR__ . '/' .str_replace('.php', '.pdf', basename(__FILE__));
             file_put_contents($filename, $response['body']);
             unlink($filename);
@@ -189,10 +194,10 @@ class EmitirDteTemporalTest extends TestCase
         );
         try {
             $response = self::$client->get($resource);
-            if ($response['status']['code'] != 200) {
-                throw new ApiException($response['body'], $response['status']['code']);
+            if ($response['status']['code'] != '200') {
+                throw new ApiException($response['body'], (int)$response['status']['code']);
             }
-            $this->assertEquals(200, $response['status']['code']);
+            $this->assertSame('200', $response['status']['code']);
             if (self::$verbose) {
                 echo "\n",'test_dte_temp() cobro_dte_temp ',json_encode($response['body']),"\n";
             }
@@ -211,10 +216,10 @@ class EmitirDteTemporalTest extends TestCase
         );
         try {
             $response = self::$client->get($resource);
-            if ($response['status']['code'] != 200) {
-                throw new ApiException($response['body'], $response['status']['code']);
+            if ($response['status']['code'] != '200') {
+                throw new ApiException($response['body'], (int)$response['status']['code']);
             }
-            $this->assertEquals(200, $response['status']['code']);
+            $this->assertSame('200', $response['status']['code']);
             if (self::$verbose) {
                 echo "\n",'test_dte_temp() datos_cobro ',json_encode($response['body']),"\n";
             }
@@ -234,10 +239,10 @@ class EmitirDteTemporalTest extends TestCase
         );
         try {
             $response = self::$client->get($resource);
-            if ($response['status']['code'] != 200) {
-                throw new ApiException($response['body'], $response['status']['code']);
+            if ($response['status']['code'] != '200') {
+                throw new ApiException($response['body'], (int)$response['status']['code']);
             }
-            $this->assertEquals(200, $response['status']['code']);
+            $this->assertSame('200', $response['status']['code']);
             if (self::$verbose) {
                 echo "\n",'test_dte_temp() eliminar_dte ',json_encode($response['body']),"\n";
             }

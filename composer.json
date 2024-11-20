@@ -17,16 +17,17 @@
     },
     "config": {
         "platform": {
-            "php": "7.3"
+            "php": "8.2"
         }
     },
     "require": {
-        "php": "^7.3 || ^8.0",
+        "php": "^8.2 || ^8.3",
         "ext-curl": "*"
     },
     "require-dev": {
-        "phpdocumentor/phpdocumentor": "^2.9",
-        "phpunit/phpunit": "^9.2",
+        "friendsofphp/php-cs-fixer": "^3.63",
+        "phpstan/phpstan": "^1.12",
+        "phpunit/phpunit": "^11.3",
         "vlucas/phpdotenv": "^5.6"
     },
     "autoload": {
@@ -39,6 +40,10 @@
         "tests_contab": "vendor/bin/phpunit --configuration=phpunit.xml --no-coverage --testsuite contab",
         "tests_pagos": "vendor/bin/phpunit --configuration=phpunit.xml --no-coverage --testsuite pagos",
         "tests_readonly": "vendor/bin/phpunit --testsuite readonly --filter 'test_dte_buscar_documento_emitido|test_dte_estado|test_dte_consultar|test_dte_ted|test_pagos_buscar_cobro|test_pagos_info_cobro'",
-        "tests_dte_temp": "vendor/bin/phpunit --configuration=phpunit.xml --no-coverage --testsuite dte_temp"
+        "tests_dte_temp": "XDEBUG_MODE=coverage vendor/bin/phpunit --configuration=phpunit.xml --testsuite dte_temp",
+        "phpcs-fix": "php-cs-fixer fix -v --config=php-cs-fixer.php .",
+        "phpcs-fix-dry-run": "php-cs-fixer fix -v --dry-run --diff --config=php-cs-fixer.php .",
+        "phpstan": "phpstan analyse --configuration=phpstan.neon --memory-limit=1G",
+        "phpstan-export": "phpstan analyse --configuration=phpstan.neon --level 9 --generate-baseline"
     }
 }

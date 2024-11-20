@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * LibreDTE: Cliente de API en PHP - Pruebas Unitarias.
  * Copyright (C) LibreDTE <https://www.libredte.cl>
@@ -19,15 +21,20 @@
  * <http://www.gnu.org/licenses/lgpl.html>.
  */
 
-use PHPUnit\Framework\TestCase;
 use libredte\api_client\ApiClient;
 use libredte\api_client\ApiException;
+use libredte\api_client\HttpCurlClient;
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
+#[CoversClass(ApiClient::class)]
+#[CoversClass(HttpCurlClient::class)]
 class AsientoContableTest extends TestCase
 {
-
     protected static $verbose;
+
     protected static $client;
+
     protected static $emisor_rut;
 
     public static function setUpBeforeClass(): void
@@ -64,7 +71,7 @@ class AsientoContableTest extends TestCase
             // esto es opcional, pero se recomienda ya que el SII lo puede pedir
             // además que permite usar un informe que indica qué documentos no
             // tienen asientos contables asociados (para cuadraturas)
-            'documentos' => ['emitidos'=>[['dte'=>33, 'folio'=>123]]],
+            'documentos' => ['emitidos' => [['dte' => 33, 'folio' => 123]]],
         ];
     }
 
@@ -74,10 +81,10 @@ class AsientoContableTest extends TestCase
         $datos = $this->_datos_asiento();
         try {
             $response = self::$client->post($resource, $datos);
-            if ($response['status']['code'] != 200) {
-                throw new ApiException($response['body'], $response['status']['code']);
+            if ($response['status']['code'] != '200') {
+                throw new ApiException($response['body'], (int)$response['status']['code']);
             }
-            $this->assertEquals(200, $response['status']['code']);
+            $this->assertSame('200', $response['status']['code']);
             if (self::$verbose) {
                 echo "\n",'test_lce_crear_asiento() asiento ',$response['body']['asiento'],"\n";
                 echo "\n",'test_lce_crear_asiento() creado ',$response['body']['creado'],"\n";
@@ -95,8 +102,8 @@ class AsientoContableTest extends TestCase
         ];
         $resource = sprintf('/lce/lce_asientos/buscar/%d', self::$emisor_rut);
         $response = self::$client->post($resource, $filtros);
-        if ($response['status']['code'] != 200) {
-            throw new ApiException($response['body'], $response['status']['code']);
+        if ($response['status']['code'] != '200') {
+            throw new ApiException($response['body'], (int)$response['status']['code']);
         }
         return $response['body'];
     }
@@ -131,10 +138,10 @@ class AsientoContableTest extends TestCase
                 self::$emisor_rut
             );
             $response = self::$client->post($url, $datos);
-            if ($response['status']['code'] != 200) {
-                throw new ApiException($response['body'], $response['status']['code']);
+            if ($response['status']['code'] != '200') {
+                throw new ApiException($response['body'], (int)$response['status']['code']);
             }
-            $this->assertEquals(200, $response['status']['code']);
+            $this->assertSame('200', $response['status']['code']);
             if (self::$verbose) {
                 echo "\n",'test_lce_editar_asiento() asiento ',$response['body']['asiento'],"\n";
                 echo "\n",'test_lce_editar_asiento() creado ',$response['body']['creado'],"\n";
@@ -144,5 +151,4 @@ class AsientoContableTest extends TestCase
             $this->fail(sprintf('[ApiException %d] %s', $e->getCode(), $e->getMessage()));
         }
     }
-
 }

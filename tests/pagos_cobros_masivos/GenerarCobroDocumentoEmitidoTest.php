@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * LibreDTE: Cliente de API en PHP - Pruebas Unitarias.
  * Copyright (C) LibreDTE <https://www.libredte.cl>
@@ -19,15 +21,20 @@
  * <http://www.gnu.org/licenses/lgpl.html>.
  */
 
-use PHPUnit\Framework\TestCase;
 use libredte\api_client\ApiClient;
 use libredte\api_client\ApiException;
+use libredte\api_client\HttpCurlClient;
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
+#[CoversClass(ApiClient::class)]
+#[CoversClass(HttpCurlClient::class)]
 class GenerarCobroDocumentoEmitidoTest extends TestCase
 {
-
     protected static $verbose;
+
     protected static $client;
+
     protected static $emisor_rut;
 
     public static function setUpBeforeClass(): void
@@ -45,8 +52,8 @@ class GenerarCobroDocumentoEmitidoTest extends TestCase
         ];
         $resource = sprintf('/dte/dte_emitidos/buscar/%d', self::$emisor_rut);
         $response = self::$client->post($resource, $filtros);
-        if ($response['status']['code'] != 200) {
-            throw new ApiException($response['body'], $response['status']['code']);
+        if ($response['status']['code'] != '200') {
+            throw new ApiException($response['body'], (int)$response['status']['code']);
         }
         return $response['body'];
     }
@@ -62,10 +69,10 @@ class GenerarCobroDocumentoEmitidoTest extends TestCase
                 self::$emisor_rut
             );
             $response = self::$client->get($resource);
-            if ($response['status']['code'] != 200) {
-                throw new ApiException($response['body'], $response['status']['code']);
+            if ($response['status']['code'] != '200') {
+                throw new ApiException($response['body'], (int)$response['status']['code']);
             }
-            $this->assertEquals(200, $response['status']['code']);
+            $this->assertSame('200', $response['status']['code']);
             if (self::$verbose) {
                 $dte_id = 'T'.$documentos[0]['dte'].'F'.$documentos[0]['folio'];
                 echo "\n",'test_pagos_generar_cobro_dte_emitido() dte_id ',$dte_id,"\n";
@@ -75,5 +82,4 @@ class GenerarCobroDocumentoEmitidoTest extends TestCase
             $this->fail(sprintf('[ApiException %d] %s', $e->getCode(), $e->getMessage()));
         }
     }
-
 }

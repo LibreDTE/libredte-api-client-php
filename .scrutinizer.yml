@@ -1,0 +1,37 @@
+checks:
+  php: true
+
+build:
+  nodes:
+    analysis:
+      tests:
+        override:
+          - php-scrutinizer-run
+          - command: composer tests_dte_temp
+            coverage:
+              file: var/tests-coverage.xml
+              format: clover
+      environment:
+        php:
+          version: 8.2.1
+          pecl_extensions:
+            - xdebug
+  dependencies:
+    before:
+      - composer install --no-progress --prefer-dist
+
+tools:
+  php_code_sniffer:
+    enabled: true
+    config:
+      standard: PSR12
+
+filter:
+  paths:
+    - src/*
+  excluded_paths:
+    - resources/*
+    - tests/*
+    - tools/*
+    - var/*
+    - vendor/*

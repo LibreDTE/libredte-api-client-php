@@ -8,27 +8,12 @@ env:
   env_var: ${{ vars.ENV_CONTEXT_VAR }}
 
 jobs:
-  display-variables:
-    name: ${{ vars.JOB_NAME }}
-    # You can use configuration variables with the `vars` context for dynamic jobs
-    if: ${{ vars.USE_VARIABLES == 'true' }}
-    runs-on: ${{ vars.RUNNER }}
-    environment: ${{ vars.ENVIRONMENT_STAGE }}
-    steps:
-    - name: Use variables
-      run: |
-        echo "LIBREDTE_HASH : $LIBREDTE_HASH"
-        echo "LIBREDTE_RUT : $LIBREDTE_RUT"
-      env:
-        LIBREDTE_HASH: ${{ secrets.LIBREDTE_HASH }}
-        LIBREDTE_RUT: ${{ vars.LIBREDTE_RUT }}
-
   test:
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        php-version: ['7.3', '8.0']  # Puedes cambiar las versiones según necesites
+        php-version: ['8.3']  # Puedes cambiar las versiones según necesites
 
     steps:
       - name: Check out repository code
@@ -57,6 +42,20 @@ jobs:
         with:
           name: tests-testdox-php_${{ matrix.php-version }}.txt
           path: var/tests-testdox.txt
+
+      - name: Upload Coverage Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: tests-coverage-php_${{ matrix.php-version }}.txt
+          path: var/tests-coverage.txt
+
+      - name: Upload to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: var/tests-coverage.xml
+          fail_ci_if_error: true
+          verbose: true
 
       - name: Display PHP version
         run: php -v

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * LibreDTE: Cliente de API en PHP - Pruebas Unitarias.
  * Copyright (C) LibreDTE <https://www.libredte.cl>
@@ -19,15 +21,20 @@
  * <http://www.gnu.org/licenses/lgpl.html>.
  */
 
-use PHPUnit\Framework\TestCase;
 use libredte\api_client\ApiClient;
 use libredte\api_client\ApiException;
+use libredte\api_client\HttpCurlClient;
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
+#[CoversClass(ApiClient::class)]
+#[CoversClass(HttpCurlClient::class)]
 class CobroMasivoTest extends TestCase
 {
-
     protected static $verbose;
+
     protected static $client;
+
     protected static $emisor_rut;
 
     public static function setUpBeforeClass(): void
@@ -46,8 +53,8 @@ class CobroMasivoTest extends TestCase
         ];
         $resource = sprintf('/pagos/cobro_masivo_programados/buscar/%d', self::$emisor_rut);
         $response = self::$client->post($resource, $filtros);
-        if ($response['status']['code'] != 200) {
-            throw new ApiException($response['body'], $response['status']['code']);
+        if ($response['status']['code'] != '200') {
+            throw new ApiException($response['body'], (int)$response['status']['code']);
         }
         if (empty($response['body'])) {
             throw new ApiException('No se encontraron cobros masivos programados para la búsqueda realizada.', 404);
@@ -121,10 +128,10 @@ class CobroMasivoTest extends TestCase
                 ],
             ];
             $response = self::$client->post($resource, $datos);
-            if ($response['status']['code'] != 200) {
-                throw new ApiException($response['body'], $response['status']['code']);
+            if ($response['status']['code'] != '200') {
+                throw new ApiException($response['body'], (int)$response['status']['code']);
             }
-            $this->assertEquals(200, $response['status']['code']);
+            $this->assertSame('200', $response['status']['code']);
             if (self::$verbose) {
                 echo "\n",'test_pagos_guardar_cobro_masivo_programado() masivo_codigo ',$cobros[0]['masivo_codigo'],"\n";
                 echo "\n",'test_pagos_guardar_cobro_masivo_programado() rut ',$cobros[0]['rut'],"\n";
@@ -151,10 +158,10 @@ class CobroMasivoTest extends TestCase
                 self::$emisor_rut
             );
             $response = self::$client->get($resource);
-            if ($response['status']['code'] != 200) {
-                throw new ApiException($response['body'], $response['status']['code']);
+            if ($response['status']['code'] != '200') {
+                throw new ApiException($response['body'], (int)$response['status']['code']);
             }
-            $this->assertEquals(200, $response['status']['code']);
+            $this->assertSame('200', $response['status']['code']);
             if (self::$verbose) {
                 echo "\n",'test_pagos_emitir_cobro_masivo_programado() masivo_codigo ',$cobros[0]['masivo_codigo'],"\n";
                 echo "\n",'test_pagos_emitir_cobro_masivo_programado() rut ',$cobros[0]['rut'],"\n";
@@ -164,5 +171,4 @@ class CobroMasivoTest extends TestCase
             $this->fail(sprintf('[ApiException %d] %s', $e->getCode(), $e->getMessage()));
         }
     }
-
 }
