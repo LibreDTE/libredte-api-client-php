@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * LibreDTE: Cliente de API en PHP - Pruebas Unitarias.
  * Copyright (C) LibreDTE <https://www.libredte.cl>

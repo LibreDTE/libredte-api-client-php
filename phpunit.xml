@@ -66,6 +66,6 @@
     <php>
         <ini name="memory_limit" value="-1" />
         <env name="LIBREDTE_URL" value="https://libredte.cl" />
-        <env name="LIBREDTE_RUT" value="19151443-2" />
+        <env name="LIBREDTE_RUT" value="76192083-9" />
     </php>
 </phpunit>
