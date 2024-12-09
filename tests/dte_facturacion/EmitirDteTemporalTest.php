@@ -166,6 +166,8 @@ class EmitirDteTemporalTest extends TestCase
             $dte_temp['codigo'],
             $dte_temp['emisor'],
         );
+        echo "Se descargará el PDF con los siguientes parámetros: \n";
+        echo $resource;
         try {
             $response = self::$client->get($resource);
             if ($response['status']['code'] != '200') {

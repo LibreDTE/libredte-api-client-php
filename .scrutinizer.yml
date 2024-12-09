@@ -13,7 +13,7 @@ build:
               format: clover
       environment:
         php:
-          version: 8.2.1
+          version: 8.3.13
           pecl_extensions:
             - xdebug
   dependencies:
