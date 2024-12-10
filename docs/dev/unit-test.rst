@@ -16,7 +16,7 @@ Para ejecutar las pruebas unitarias se necesita tener instaladas las dependencia
 .. code-block:: shell
     ./vendor/bin/phpunit
 
-También es posible ejecutar una pruebas específica indicando el test. Ejemplo:
+También es posible ejecutar una prueba específica indicando el test. Ejemplo:
 
 .. code-block:: shell
     ./vendor/bin/phpunit --filter test_dte_buscar_documento_emitido
