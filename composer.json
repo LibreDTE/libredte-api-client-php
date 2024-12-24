@@ -31,16 +31,18 @@
         "vlucas/phpdotenv": "^5.6"
     },
     "autoload": {
-        "psr-4": {"libredte\\api_client\\": "src/"}
+        "psr-4": {
+            "libredte\\api_client\\": "src/",
+            "libredte\\dte_facturacion\\": "tests/dte_facturacion/",
+            "libredte\\pagos_cobros_masivos\\": "tests/pagos_cobros_masivos/"
+        }
     },
     "scripts": {
         "docs": "php tools/phpdocumentor run --config=phpdoc.xml",
         "tests": "XDEBUG_MODE=coverage vendor/bin/phpunit --configuration=phpunit.xml",
-        "tests_dte": "vendor/bin/phpunit --configuration=phpunit.xml --no-coverage --testsuite dte",
-        "tests_contab": "vendor/bin/phpunit --configuration=phpunit.xml --no-coverage --testsuite contab",
-        "tests_pagos": "vendor/bin/phpunit --configuration=phpunit.xml --no-coverage --testsuite pagos",
-        "tests_readonly": "vendor/bin/phpunit --testsuite readonly --filter 'test_dte_buscar_documento_emitido|test_dte_estado|test_dte_consultar|test_dte_ted|test_pagos_buscar_cobro|test_pagos_info_cobro'",
-        "tests_dte_temp": "XDEBUG_MODE=coverage vendor/bin/phpunit --configuration=phpunit.xml --testsuite dte_temp",
+        "tests-dte": "XDEBUG_MODE=coverage vendor/bin/phpunit --configuration=phpunit.xml --testsuite dte-facturacion",
+        "tests-cobros": "XDEBUG_MODE=coverage vendor/bin/phpunit --configuration=phpunit.xml --testsuite pagos-cobros-mas",
+        "tests-readonly": "XDEBUG_MODE=coverage vendor/bin/phpunit --configuration=phpunit.xml --testsuite readonly",
         "phpcs-fix": "php-cs-fixer fix -v --config=php-cs-fixer.php .",
         "phpcs-fix-dry-run": "php-cs-fixer fix -v --dry-run --diff --config=php-cs-fixer.php .",
         "phpstan": "phpstan analyse --configuration=phpstan.neon --memory-limit=1G",

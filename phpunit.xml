@@ -28,24 +28,14 @@
         </include>
     </source>
     <testsuites>
-        <testsuite name="LibreDTE: Cliente de API en PHP - Pruebas Unitarias.">
-            <directory>tests</directory>
-        </testsuite>
-        <testsuite name="dte">
+        <testsuite name="dte-facturacion">
             <directory>tests/dte_facturacion</directory>
         </testsuite>
-        <testsuite name="contab">
+        <testsuite name="lce-contabilidad">
             <directory>tests/lce_contabilidad</directory>
         </testsuite>
-        <testsuite name="pagos">
+        <testsuite name="pagos-cobros-mas">
             <directory>tests/pagos_cobros_masivos</directory>
-        </testsuite>
-        <testsuite name="readonly">
-            <file>tests/dte_facturacion/BuscarDocumentoEmitidoTest.php</file>
-            <file>tests/pagos_cobros_masivos/BuscarCobroTest.php</file>
-        </testsuite>
-        <testsuite name="dte_temp">
-            <file>tests/dte_facturacion/EmitirDteTemporalTest.php</file>
         </testsuite>
     </testsuites>
     <coverage

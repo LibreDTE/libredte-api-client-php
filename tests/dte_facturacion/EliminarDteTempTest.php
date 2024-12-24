@@ -24,62 +24,52 @@ declare(strict_types=1);
 use libredte\api_client\ApiClient;
 use libredte\api_client\ApiException;
 use libredte\api_client\HttpCurlClient;
-use PHPUnit\Framework\TestCase;
+use libredte\dte_facturacion\AbstractDteFacturacion;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ApiClient::class)]
 #[CoversClass(HttpCurlClient::class)]
-class GenerarCobroDocumentoTemporalTest extends TestCase
+/**
+ * Clase de test para eliminar un DTE temporal.
+ */
+class EliminarDteTempTest extends AbstractDteFacturacion
 {
-    protected static $verbose;
-
-    protected static $client;
-
-    protected static $emisor_rut;
-
-    public static function setUpBeforeClass(): void
+    /**
+     * Método de test que prueba el servicio de eliminar un DTE temporal.
+     *
+     * @throws \libredte\api_client\ApiException
+     *
+     * @return void
+     */
+    public function testEliminarDteTemp()
     {
-        self::$verbose = env('TEST_VERBOSE', false);
-        self::$emisor_rut = (int)(explode('-', (string)env('LIBREDTE_RUT'))[0]);
-        self::$client = new ApiClient();
-    }
+        # Se emite un DTE temporal para ejecutar esta prueba.
+        $dte_temp = $this->emitirDteTemp();
 
-    private function _buscar(): array
-    {
-        $filtros = [
-            'fecha_desde' => '2015-01-01',
-            'fecha_hasta' => date('Y-m-d'),
-        ];
-        $resource = sprintf('/dte/dte_tmps/buscar/%d', self::$emisor_rut);
-        $response = self::$client->post($resource, $filtros);
-        if ($response['status']['code'] != '200') {
-            throw new ApiException($response['body'], (int)$response['status']['code']);
-        }
-        return $response['body'];
-    }
-
-    public function test_pagos_generar_cobro_documento_temporal(): void
-    {
+        # Se genera el recurso a consumir.
+        $resource = sprintf(
+            '/dte/dte_tmps/eliminar/%d/%d/%s/%d',
+            $dte_temp['body']['receptor'],
+            $dte_temp['body']['dte'],
+            $dte_temp['body']['codigo'],
+            self::$emisor_rut
+        );
         try {
-            $documentos = $this->_buscar();
-            $resource = sprintf(
-                '/dte/dte_tmps/cobro/%d/%d/%s/%d',
-                $documentos[0]['receptor'],
-                $documentos[0]['dte'],
-                $documentos[0]['codigo'],
-                self::$emisor_rut
-            );
+            # Se envía la solicitud http y se guarda su respuesta.
             $response = self::$client->get($resource);
-            if ($response['status']['code'] != '200') {
+            # Si el código http no es '200', arroja error ApiException.
+            if ($response['status']['code'] !== '200') {
                 throw new ApiException($response['body'], (int)$response['status']['code']);
             }
+            # Se compara el código con '200' Si no es 200, la prueba falla.
             $this->assertSame('200', $response['status']['code']);
+            # Se despliega en consola los resultados si verbose es true.
             if (self::$verbose) {
-                $temporal_folio = $documentos[0]['folio'];
-                echo "\n",'test_pagos_generar_cobro_dte_temporal() temporal_folio ',$temporal_folio,"\n";
-                echo "\n",'test_pagos_generar_cobro_dte_temporal() cobro_codigo ',$response['body']['codigo'],"\n";
+                echo "\n",'testEliminarDteTemp() eliminar_dte ',json_encode($response['body']),"\n";
             }
         } catch (ApiException $e) {
+            # Si falla, desplegará el mensaje y error en el siguiente formato:
+            # [ApiException codigo-http] mensaje]
             $this->fail(sprintf('[ApiException %d] %s', $e->getCode(), $e->getMessage()));
         }
     }

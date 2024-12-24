@@ -19,4 +19,4 @@ Para ejecutar las pruebas unitarias se necesita tener instaladas las dependencia
 También es posible ejecutar una prueba específica indicando el test. Ejemplo:
 
 .. code-block:: shell
-    ./vendor/bin/phpunit --filter test_dte_buscar_documento_emitido
+    ./vendor/bin/phpunit --filter testEmitirDteTemp --no-coverage

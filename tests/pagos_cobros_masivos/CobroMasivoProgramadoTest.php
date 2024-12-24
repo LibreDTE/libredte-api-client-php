@@ -29,14 +29,37 @@ use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ApiClient::class)]
 #[CoversClass(HttpCurlClient::class)]
-class CobroMasivoTest extends TestCase
+/**
+ * Clase para ejecutar tests a los servicios de cobros masivos.
+ */
+class CobroMasivoProgramadoTest extends TestCase
 {
+    /**
+     * Variable para desplegar resultados.
+     *
+     * @var bool
+     */
     protected static $verbose;
 
+    /**
+     * Variable de instanciación de API Client.
+     *
+     * @var ApiClient
+     */
     protected static $client;
 
+    /**
+     * RUT del emisor sin DV a utilizar.
+     *
+     * @var int
+     */
     protected static $emisor_rut;
 
+    /**
+     * Función para inicializar variables y clases pre ejecución de tests.
+     *
+     * @return void
+     */
     public static function setUpBeforeClass(): void
     {
         self::$verbose = env('TEST_VERBOSE', false);
@@ -44,35 +67,57 @@ class CobroMasivoTest extends TestCase
         self::$client = new ApiClient();
     }
 
+    /**
+     * Método privado para listar cobros masivos programados.
+     *
+     * @throws \libredte\api_client\ApiException
+     *
+     * @return array Arreglo con los cobros masivos programados.
+     */
     private function _buscar(): array
     {
+        # Filtros para la petición http.
         $filtros = [
             'siguiente_desde' => date('Y-m-d'),
             'siguiente_hasta' => date('Y-m-d'),
             'activo' => true,
         ];
+        # Recurso a consumir.
         $resource = sprintf('/pagos/cobro_masivo_programados/buscar/%d', self::$emisor_rut);
+        # Se envía la solicitud http y se guarda su respuesta.
         $response = self::$client->post($resource, $filtros);
+        # Si el código http no es '200', arroja error ApiException.
         if ($response['status']['code'] != '200') {
             throw new ApiException($response['body'], (int)$response['status']['code']);
         }
+        # Si el body de la respuesta es vacío o nulo, arroja error ApiException.
         if (empty($response['body'])) {
             throw new ApiException('No se encontraron cobros masivos programados para la búsqueda realizada.', 404);
         }
         return $response['body'];
     }
 
-    public function test_pagos_buscar_cobro_masivo_programado(): void
+    /**
+     * Método para buscar un cobro masivo programado.
+     *
+     * @return void
+     */
+    public function testPagosBuscarCobroMasivoProgramado(): void
     {
         try {
+            # Se listan cobros masivos programados.
             $cobros = $this->_buscar();
+            # La prueba tendrá éxito si la búsqueda funciona.
             $this->assertTrue(true);
+            # Se despliega en consola los resultados si verbose es true.
             if (self::$verbose) {
                 echo "\n",'test_pagos_buscar_cobro_masivo_programado() n_cobros ',count($cobros),"\n";
                 echo "\n",'test_pagos_buscar_cobro_masivo_programado() masivo_codigo ',$cobros[0]['masivo_codigo'],"\n";
                 echo "\n",'test_pagos_buscar_cobro_masivo_programado() rut ',$cobros[0]['rut'],"\n";
             }
         } catch (ApiException $e) {
+            # Si falla, desplegará el mensaje y error en el siguiente formato:
+            # [ApiException codigo-http] mensaje]
             $this->fail(sprintf('[ApiException %d] %s', $e->getCode(), $e->getMessage()));
         }
     }
@@ -104,13 +149,20 @@ class CobroMasivoTest extends TestCase
      *
      * IMPORTANTE: para eliminar un item marcarlo con cantidad = 0.
      * No es posible eliminar vía servicios web items obligatorios.
+     *
+     * @throws \libredte\api_client\ApiException
+     *
+     * @return void
      */
-    public function test_pagos_guardar_cobro_masivo_programado(): void
+    public function testPagosGuardarCobroMasivoProgramado(): void
     {
 
         try {
+            # Búsqueda de cobros masivos.
             $cobros = $this->_buscar();
+            # Recurso a consumir.
             $resource = '/pagos/cobro_masivo_programados/guardar';
+            # Datos del cobro masivo.
             $datos = [
                 // datos obligatorios
                 'emisor' => self::$emisor_rut,
@@ -127,17 +179,23 @@ class CobroMasivoTest extends TestCase
                     ],
                 ],
             ];
+            # Se envía la solicitud http y se guarda su respuesta.
             $response = self::$client->post($resource, $datos);
+            # Si el código http no es '200', arroja error ApiException.
             if ($response['status']['code'] != '200') {
                 throw new ApiException($response['body'], (int)$response['status']['code']);
             }
+            # Se compara el código con '200' Si no es 200, la prueba falla.
             $this->assertSame('200', $response['status']['code']);
+            # Se despliega en consola los resultados si verbose es true.
             if (self::$verbose) {
                 echo "\n",'test_pagos_guardar_cobro_masivo_programado() masivo_codigo ',$cobros[0]['masivo_codigo'],"\n";
                 echo "\n",'test_pagos_guardar_cobro_masivo_programado() rut ',$cobros[0]['rut'],"\n";
                 echo "\n",'test_pagos_guardar_cobro_masivo_programado() resultado ',json_encode($response['body']),"\n";
             }
         } catch (ApiException $e) {
+            # Si falla, desplegará el mensaje y error en el siguiente formato:
+            # [ApiException codigo-http] mensaje]
             $this->fail(sprintf('[ApiException %d] %s', $e->getCode(), $e->getMessage()));
         }
     }
@@ -146,28 +204,40 @@ class CobroMasivoTest extends TestCase
      * Prueba unitaria que muestra los pasos para:
      *  - Emitir un cobro masivo, emitiendo y enviando por correo, cada uno de
      *    los documentos generados (si así está configurado)
+     *
+     * @throws \libredte\api_client\ApiException
+     *
+     * @return void
      */
-    public function test_pagos_emitir_cobro_masivo_programado(): void
+    public function testPagosEmitirCobroMasivoProgramado(): void
     {
         try {
+            # Búsqueda de cobros masivos programados.
             $cobros = $this->_buscar();
+            # Recurso a consumir.
             $resource = sprintf(
                 '/pagos/cobro_masivo_programados/emitir/%s/%d/%d',
                 $cobros[0]['masivo_codigo'],
                 explode('-', $cobros[0]['rut'])[0],
                 self::$emisor_rut
             );
+            # Se envía la solicitud http y se guarda su respuesta.
             $response = self::$client->get($resource);
+            # Si el código http no es '200', arroja error ApiException.
             if ($response['status']['code'] != '200') {
                 throw new ApiException($response['body'], (int)$response['status']['code']);
             }
+            # Se compara el código con '200' Si no es 200, la prueba falla.
             $this->assertSame('200', $response['status']['code']);
+            # Se despliega en consola los resultados si verbose es true.
             if (self::$verbose) {
                 echo "\n",'test_pagos_emitir_cobro_masivo_programado() masivo_codigo ',$cobros[0]['masivo_codigo'],"\n";
                 echo "\n",'test_pagos_emitir_cobro_masivo_programado() rut ',$cobros[0]['rut'],"\n";
                 echo "\n",'test_pagos_emitir_cobro_masivo_programado() resultado ',json_encode($response['body']),"\n";
             }
         } catch (ApiException $e) {
+            # Si falla, desplegará el mensaje y error en el siguiente formato:
+            # [ApiException codigo-http] mensaje]
             $this->fail(sprintf('[ApiException %d] %s', $e->getCode(), $e->getMessage()));
         }
     }
