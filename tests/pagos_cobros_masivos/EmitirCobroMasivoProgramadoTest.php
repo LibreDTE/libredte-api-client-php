@@ -24,35 +24,52 @@ declare(strict_types=1);
 use libredte\api_client\ApiClient;
 use libredte\api_client\ApiException;
 use libredte\api_client\HttpCurlClient;
-use libredte\dte_facturacion\AbstractDteFacturacion;
+use libredte\pagos_cobros_masivos\AbstractPagosCobrosMasivos;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ApiClient::class)]
 #[CoversClass(HttpCurlClient::class)]
 /**
- * Clase de pruebas que permite buscar un DTE temporal.
+ * Clase para ejecutar tests a los servicios de cobros masivos.
  */
-class ListarDtesTempTest extends AbstractDteFacturacion
+class EmitirCobroMasivoProgramadoTest extends AbstractPagosCobrosMasivos
 {
     /**
-     * Método de test para listar todos los DTEs temporales.
+     * Prueba unitaria que muestra los pasos para:
+     *  - Emitir un cobro masivo, emitiendo y enviando por correo, cada uno de
+     *    los documentos generados (si así está configurado)
      *
      * @throws \libredte\api_client\ApiException
      *
      * @return void
      */
-    public function testListarDtesTemp(): void
+    public function testEmitirCobroMasivoProgramado(): void
     {
         try {
-            // Se listan los DTEs temporales.
-            $lista_dtes = $this->listarDteTemp();
-
-            // La prueba tendrá éxito si la búsqueda funciona.
-            $this->assertTrue(true);
+            // Búsqueda de cobros masivos programados.
+            $cobros = $this->listarCobrosMasivosProgramados();
+            // Recurso a consumir.
+            $resource = sprintf(
+                '/pagos/cobro_masivo_programados/emitir/%s/%d/%d',
+                $cobros['body'][0]['masivo_codigo'],
+                explode('-', $cobros['body'][0]['rut'])[0],
+                self::$emisor_rut
+            );
+            // Se envía la solicitud http y se guarda su respuesta.
+            $response = self::$client->get($resource);
+            // Si el código http no es '200', arroja error ApiException.
+            if ($response['status']['code'] != '200') {
+                throw new ApiException(
+                    $response['body'],
+                    (int)$response['status']['code']
+                );
+            }
+            // Se compara el código con '200' Si no es 200, la prueba falla.
+            $this->assertSame('200', $response['status']['code']);
             // Se despliega en consola los resultados si verbose es true.
             if (self::$verbose) {
-                echo "\n",'testListarDteTemps() Lista DTEs: ',json_encode(
-                    $lista_dtes['body']
+                echo "\n",'testEmitirCobroMasivoProgramado() Cobro: ',json_encode(
+                    $response['body']
                 ),"\n";
             }
         } catch (ApiException $e) {

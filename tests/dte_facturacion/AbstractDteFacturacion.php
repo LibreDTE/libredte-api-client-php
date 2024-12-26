@@ -98,8 +98,13 @@ abstract class AbstractDteFacturacion extends TestCase
     public static function setUpBeforeClass(): void
     {
         self::$verbose = (bool)env('TEST_VERBOSE', 'false');
-        self::$emisor_rut = (explode('-', (string)env('LIBREDTE_RUT'))[0]);
-        self::$datos['Encabezado']['Emisor']['RUTEmisor'] = env('LIBREDTE_RUT');
+        self::$emisor_rut = (explode(
+            '-',
+            (string)env('LIBREDTE_RUT'))[0]
+        );
+        self::$datos['Encabezado']['Emisor']['RUTEmisor'] = env(
+            'LIBREDTE_RUT'
+        );
         self::$client = new ApiClient();
     }
 
@@ -112,22 +117,28 @@ abstract class AbstractDteFacturacion extends TestCase
      */
     protected function listarDteTemp(): array
     {
-        # Se crea el filtro a utilizar, en este caso fechas de búsqueda.
+        // Se crea el filtro a utilizar, en este caso fechas de búsqueda.
         $filtros = [
-            'fecha_desde' => '2015-01-01',
+            'fecha_desde' => date('Y-m-d', strtotime('-30 days')),
             'fecha_hasta' => date('Y-m-d'),
         ];
-        # Se genera el recurso a consumir.
-        $resource = sprintf('/dte/dte_tmps/buscar/%d', self::$emisor_rut);
-        # Se envía la solicitud http y se guarda su respuesta.
+        // Se genera el recurso a consumir.
+        $resource = sprintf(
+            '/dte/dte_tmps/buscar/%d',
+            self::$emisor_rut
+        );
+        // Se envía la solicitud http y se guarda su respuesta.
         $response = self::$client->post($resource, $filtros);
 
-        # Si el código http no es '200', arroja error ApiException.
+        // Si el código http no es '200', arroja error ApiException.
         if ($response['status']['code'] !== '200') {
-            throw new ApiException($response['body'], (int)$response['status']['code']);
+            throw new ApiException(
+                $response['body'],
+                (int)$response['status']['code']
+            );
         }
 
-        # Retorna la respuesta http.
+        // Retorna la respuesta http.
         return $response;
     }
 
@@ -140,15 +151,21 @@ abstract class AbstractDteFacturacion extends TestCase
      */
     protected function emitirDteTemp(): array
     {
-        # Se envía la solicitud http y se guarda su respuesta.
-        $response = self::$client->post('/dte/documentos/emitir', self::$datos);
+        // Se envía la solicitud http y se guarda su respuesta.
+        $response = self::$client->post(
+            '/dte/documentos/emitir',
+            self::$datos
+        );
 
-        # Si el código http no es '200', arroja error ApiException.
+        // Si el código http no es '200', arroja error ApiException.
         if ($response['status']['code'] !== '200') {
-            throw new ApiException($response['body'], (int)$response['status']['code']);
+            throw new ApiException(
+                $response['body'],
+                (int)$response['status']['code']
+            );
         }
 
-        # Retorna la respuesta http.
+        // Retorna la respuesta http.
         return $response;
     }
 }

@@ -44,19 +44,25 @@ class EmitirDteTempTest extends AbstractDteFacturacion
     public function testEmitirDteTemp(): void
     {
         try {
-            # Se emite un DTE temporal para ejecutar esta prueba.
+            // Se emite un DTE temporal para ejecutar esta prueba.
             $dte_temp = $this->emitirDteTemp();
 
-            # Se compara el código con '200' Si no es 200, la prueba falla.
+            // Se compara el código con '200' Si no es 200, la prueba falla.
             $this->assertSame('200', $dte_temp['status']['code']);
-            # Se despliega en consola los resultados si verbose es true.
+            // Se despliega en consola los resultados si verbose es true.
             if (self::$verbose) {
-                echo "\n",'testEmitirDteTemp() Emitir: ',json_encode($dte_temp['body']),"\n";
+                echo "\n",'testEmitirDteTemp() Emitir: ',json_encode(
+                    $dte_temp['body']
+                ),"\n";
             }
         } catch (ApiException $e) {
-            # Si falla, desplegará el mensaje y error en el siguiente formato:
-            # [ApiException codigo-http] mensaje]
-            $this->fail(sprintf('[ApiException %d] %s', $e->getCode(), $e->getMessage()));
+            // Si falla, desplegará el mensaje y error en el siguiente formato:
+            // [ApiException codigo-http] mensaje]
+            $this->fail(sprintf(
+                '[ApiException %d] %s',
+                $e->getCode(),
+                $e->getMessage()
+            ));
         }
     }
 }

@@ -45,11 +45,11 @@ class DescargarPdfDteTempTest extends AbstractDteFacturacion
     public function testDescargarPdfTemp(): void
     {
         try {
-            # Se emite un DTE temporal para ejecutar esta prueba.
+            // Se emite un DTE temporal para ejecutar esta prueba.
             $emitir = $this->emitirDteTemp();
             $documento = $emitir['body'];
 
-            # Se genera el recurso a consumir.
+            // Se genera el recurso a consumir.
             $resource = sprintf(
                 '/dte/dte_tmps/pdf/%d/%d/%s/%d',
                 $documento['receptor'],
@@ -57,41 +57,54 @@ class DescargarPdfDteTempTest extends AbstractDteFacturacion
                 $documento['codigo'],
                 self::$emisor_rut,
             );
-            # Se envía la solicitud http y se guarda su respuesta.
+            // Se envía la solicitud http y se guarda su respuesta.
             $response = self::$client->get($resource);
 
-            # Si el código http no es '200', arroja error ApiException.
+            // Si el código http no es '200', arroja error ApiException.
             if ($response['status']['code'] !== '200') {
-                throw new ApiException($response['body'], (int)$response['status']['code']);
+                throw new ApiException(
+                    $response['body'],
+                    (int)$response['status']['code']
+                );
             }
-            # Se compara el código con '200' Si no es 200, la prueba falla.
+            // Se compara el código con '200' Si no es 200, la prueba falla.
             $this->assertSame('200', $response['status']['code']);
 
-            # Ruta base para el directorio actual (archivo ejecutándose en "tests/dte_facturacion")
+            // Ruta base para el directorio actual (archivo ejecutándose en
+            // "tests/dte_facturacion")
             $currentDir = __DIR__;
 
-            # Nueva ruta relativa para guardar el archivo PDF en "tests/archivos"
+            // Nueva ruta relativa para guardar el archivo PDF en "tests/archivos"
             $targetDir = dirname($currentDir) . '/archivos/dte_facturacion';
 
-            # Define el nombre del archivo PDF en el nuevo directorio
-            $filename = $targetDir . '/' . sprintf('LIBREDTE_%d_%d-%s.pdf', self::$emisor_rut, $documento['dte'], $documento['codigo']);
+            // Define el nombre del archivo PDF en el nuevo directorio
+            $filename = $targetDir . '/' . sprintf(
+                'LIBREDTE_%d_%d-%s.pdf',
+                self::$emisor_rut,
+                $documento['dte'],
+                $documento['codigo']
+            );
 
-            # Verifica si el directorio existe, si no, créalo
+            // Verifica si el directorio existe, si no, créalo
             if (!is_dir($targetDir)) {
                 mkdir($targetDir, 0777, true);
             }
 
-            # Se genera el archivo PDF.
+            // Se genera el archivo PDF.
             file_put_contents($filename, $response['body']);
 
-            # Se despliega en consola los resultados si verbose es true.
+            // Se despliega en consola los resultados si verbose es true.
             if (self::$verbose) {
                 echo "\n",'testDescargarPdfTemp() PDF: ',$filename,"\n";
             }
         } catch (ApiException $e) {
-            # Si falla, desplegará el mensaje y error en el siguiente formato:
-            # [ApiException codigo-http] mensaje]
-            $this->fail(sprintf('[ApiException %d] %s', $e->getCode(), $e->getMessage()));
+            // Si falla, desplegará el mensaje y error en el siguiente formato:
+            // [ApiException codigo-http] mensaje]
+            $this->fail(sprintf(
+                '[ApiException %d] %s',
+                $e->getCode(),
+                $e->getMessage()
+            ));
         }
     }
 }

@@ -24,35 +24,32 @@ declare(strict_types=1);
 use libredte\api_client\ApiClient;
 use libredte\api_client\ApiException;
 use libredte\api_client\HttpCurlClient;
-use libredte\dte_facturacion\AbstractDteFacturacion;
+use libredte\pagos_cobros_masivos\AbstractPagosCobrosMasivos;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ApiClient::class)]
 #[CoversClass(HttpCurlClient::class)]
 /**
- * Clase de pruebas que permite buscar un DTE temporal.
+ * Clase de pruebas para listar cobros masivos programados.
  */
-class ListarDtesTempTest extends AbstractDteFacturacion
+class ListarCobrosMasivosProgramadosTest extends AbstractPagosCobrosMasivos
 {
     /**
-     * Método de test para listar todos los DTEs temporales.
-     *
-     * @throws \libredte\api_client\ApiException
+     * Método de test para listar cobros masivos programados.
      *
      * @return void
      */
-    public function testListarDtesTemp(): void
+    public function testListarCobrosMasivosProgramados(): void
     {
         try {
-            // Se listan los DTEs temporales.
-            $lista_dtes = $this->listarDteTemp();
-
+            // Se listan cobros masivos programados.
+            $cobros = $this->listarCobrosMasivosProgramados();
             // La prueba tendrá éxito si la búsqueda funciona.
             $this->assertTrue(true);
             // Se despliega en consola los resultados si verbose es true.
             if (self::$verbose) {
-                echo "\n",'testListarDteTemps() Lista DTEs: ',json_encode(
-                    $lista_dtes['body']
+                echo "\n",'testListarCobroMasivoProgramado() Cobro Masivo: ',json_encode(
+                    $cobros['body']
                 ),"\n";
             }
         } catch (ApiException $e) {

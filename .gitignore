@@ -1,6 +1,6 @@
 vendor/
 tests/test.env
-tests/archivos/
+tests/archivos/dte_facturacion/*
 
 var/
 tools/

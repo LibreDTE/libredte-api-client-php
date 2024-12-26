@@ -42,18 +42,24 @@ class ListarCobrosDteTempTest extends AbstractPagosCobrosMasivos
     public function testListarCobrosDteTemp(): void
     {
         try {
-            # Se obtiene un listado de cobros.
+            // Se obtiene un listado de cobros.
             $cobros = $this->listarCobros();
-            # La prueba tendrá éxito si la búsqueda funciona.
+            // La prueba tendrá éxito si la búsqueda funciona.
             $this->assertTrue(true);
-            # Se despliega en consola los resultados si verbose es true.
+            // Se despliega en consola los resultados si verbose es true.
             if (self::$verbose) {
-                echo "\n",'testListarCobrosDteTemp() Cobro: ',json_encode($cobros['body']),"\n";
+                echo "\n",'testListarCobrosDteTemp() Cobro: ',json_encode(
+                    $cobros['body']
+                ),"\n";
             }
         } catch (ApiException $e) {
-            # Si falla, desplegará el mensaje y error en el siguiente formato:
-            # [ApiException codigo-http] mensaje]
-            $this->fail(sprintf('[ApiException %d] %s', $e->getCode(), $e->getMessage()));
+            // Si falla, desplegará el mensaje y error en el siguiente formato:
+            // [ApiException codigo-http] mensaje]
+            $this->fail(sprintf(
+                '[ApiException %d] %s',
+                $e->getCode(),
+                $e->getMessage()
+            ));
         }
     }
 }

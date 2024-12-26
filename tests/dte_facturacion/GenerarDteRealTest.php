@@ -42,33 +42,45 @@ class GenerarDteRealTest extends AbstractDteFacturacion
     public function testGenerarDteReal(): void
     {
         try {
-            # Se emite un DTE temporal para ejecutar esta prueba.
+            // Se emite un DTE temporal para ejecutar esta prueba.
             $dte_temp = $this->emitirDteTemp();
 
-            # Se llena una lista con la información que se va a pasar
-            # a la petición http.
+            // Se llena una lista con la información que se va a pasar
+            // a la petición http.
             $data = [
                 'emisor' => self::$emisor_rut,
                 'receptor' => $dte_temp['body']['receptor'],
                 'dte' => $dte_temp['body']['dte'],
                 'codigo' => $dte_temp['body']['codigo']
             ];
-            # Se envía la solicitud http y se guarda su respuesta.
-            $response = self::$client->post('/dte/documentos/generar', $data);
-            # Si el código http no es '200', arroja error ApiException.
+            // Se envía la solicitud http y se guarda su respuesta.
+            $response = self::$client->post(
+                '/dte/documentos/generar',
+                $data
+            );
+            // Si el código http no es '200', arroja error ApiException.
             if ($response['status']['code'] !== '200') {
-                throw new ApiException($response['body'], (int)$response['status']['code']);
+                throw new ApiException(
+                    $response['body'],
+                    (int)$response['status']['code']
+                );
             }
-            # Se compara el código con '200' Si no es 200, la prueba falla.
+            // Se compara el código con '200' Si no es 200, la prueba falla.
             $this->assertSame('200', $response['status']['code']);
-            # Se despliega en consola los resultados si verbose es true.
+            // Se despliega en consola los resultados si verbose es true.
             if (self::$verbose) {
-                echo "\n",'testGenerarDteReal() Generar: ',json_encode($response['body']),"\n";
+                echo "\n",'testGenerarDteReal() Generar: ',json_encode(
+                    $response['body']
+                ),"\n";
             }
         } catch (ApiException $e) {
-            # Si falla, desplegará el mensaje y error en el siguiente formato:
-            # [ApiException codigo-http] mensaje]
-            $this->fail(sprintf('[ApiException %d] %s', $e->getCode(), $e->getMessage()));
+            // Si falla, desplegará el mensaje y error en el siguiente formato:
+            // [ApiException codigo-http] mensaje]
+            $this->fail(sprintf(
+                '[ApiException %d] %s',
+                $e->getCode(),
+                $e->getMessage()
+            ));
         }
     }
 }

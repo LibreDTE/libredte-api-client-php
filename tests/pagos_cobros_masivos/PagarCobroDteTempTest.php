@@ -44,39 +44,51 @@ class PagarCobroDteTempTest extends AbstractPagosCobrosMasivos
     public function testPagarCobroDteTemp(): void
     {
         try {
-            # Se obtiene una lista de cobros.
+            // Se obtiene una lista de cobros.
             $cobro = $this->obtenerCobroDteTemp();
 
-            # Se crea el recurso a consumir.
+            // Se crea el recurso a consumir.
             $resource = sprintf(
                 '/pagos/cobros/pagar/%s/%d',
                 $cobro['body']['codigo'],
                 self::$emisor_rut
             );
-            # Se crea el array con los datos a enviar,
+            // Se crea el array con los datos a enviar,
             $data = [
                 'medio' => 'efectivo',
                 'fecha' => (string)date('Y-m-d')
             ];
 
-            # Se envía la solicitud http y se guarda su respuesta.
-            $response = self::$client->post($resource, $data);
+            // Se envía la solicitud http y se guarda su respuesta.
+            $response = self::$client->post(
+                $resource,
+                $data
+            );
 
-            # Si el código http no es '200', arroja error ApiException.
+            // Si el código http no es '200', arroja error ApiException.
             if ($response['status']['code'] !== '200') {
-                throw new ApiException($response['body'], (int)$response['status']['code']);
+                throw new ApiException(
+                    $response['body'],
+                    (int)$response['status']['code']
+                );
             }
 
             $this->assertSame('200', $response['status']['code']);
 
-            # Se despliega en consola los resultados si verbose es true.
+            // Se despliega en consola los resultados si verbose es true.
             if (self::$verbose) {
-                echo "\n",'testPagarCobroDteTemp() Cobro: ',json_encode($response['body']),"\n";
+                echo "\n",'testPagarCobroDteTemp() Cobro: ',json_encode(
+                    $response['body']
+                ),"\n";
             }
         } catch (ApiException $e) {
-            # Si falla, desplegará el mensaje y error en el siguiente formato:
-            # [ApiException codigo-http] mensaje]
-            $this->fail(sprintf('[ApiException %d] %s', $e->getCode(), $e->getMessage()));
+            // Si falla, desplegará el mensaje y error en el siguiente formato:
+            // [ApiException codigo-http] mensaje]
+            $this->fail(sprintf(
+                '[ApiException %d] %s',
+                $e->getCode(),
+                $e->getMessage()
+            ));
         }
     }
 }

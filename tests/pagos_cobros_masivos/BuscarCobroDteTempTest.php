@@ -44,30 +44,39 @@ class BuscarCobroDteTempTest extends AbstractPagosCobrosMasivos
     public function testBuscarCobroDteTemp(): void
     {
         try {
-            # Se obtiene la lista de cobros.
+            // Se obtiene la lista de cobros.
             $cobro = $this->obtenerCobroDteTemp();
-            # Se crea el recurso a consumir.
+            // Se crea el recurso a consumir.
             $resource = sprintf(
                 '/pagos/cobros/info/%s/%d',
                 $cobro['body']['codigo'],
                 self::$emisor_rut
             );
-            # Se envía la solicitud http y se guarda su respuesta.
+            // Se envía la solicitud http y se guarda su respuesta.
             $response = self::$client->get($resource);
-            # Si el código http no es '200', arroja error ApiException.
+            // Si el código http no es '200', arroja error ApiException.
             if ($response['status']['code'] !== '200') {
-                throw new ApiException($response['body'], (int)$response['status']['code']);
+                throw new ApiException(
+                    $response['body'],
+                    (int)$response['status']['code']
+                );
             }
-            # Se compara el código con '200' Si no es 200, la prueba falla.
+            // Se compara el código con '200' Si no es 200, la prueba falla.
             $this->assertSame('200', $response['status']['code']);
-            # Se despliega en consola los resultados si verbose es true.
+            // Se despliega en consola los resultados si verbose es true.
             if (self::$verbose) {
-                echo "\n",'testBuscarCobroAsociado() Cobro: ',json_encode($response['body']),"\n";
+                echo "\n",'testBuscarCobroAsociado() Cobro: ',json_encode(
+                    $response['body']
+                ),"\n";
             }
         } catch (ApiException $e) {
-            # Si falla, desplegará el mensaje y error en el siguiente formato:
-            # [ApiException codigo-http] mensaje]
-            $this->fail(sprintf('[ApiException %d] %s', $e->getCode(), $e->getMessage()));
+            // Si falla, desplegará el mensaje y error en el siguiente formato:
+            // [ApiException codigo-http] mensaje]
+            $this->fail(sprintf(
+                '[ApiException %d] %s',
+                $e->getCode(),
+                $e->getMessage()
+            ));
         }
     }
 }

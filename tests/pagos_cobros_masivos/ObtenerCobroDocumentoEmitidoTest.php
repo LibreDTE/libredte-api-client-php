@@ -24,6 +24,7 @@ declare(strict_types=1);
 use libredte\api_client\ApiClient;
 use libredte\api_client\ApiException;
 use libredte\api_client\HttpCurlClient;
+use libredte\pagos_cobros_masivos\AbstractPagosCobrosMasivos;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 
@@ -32,65 +33,8 @@ use PHPUnit\Framework\Attributes\CoversClass;
 /**
  * Clase de test para generar un cobro de un documento emitido (real).
  */
-class ObtenerCobroDocumentoEmitidoTest extends TestCase
+class ObtenerCobroDocumentoEmitidoTest extends AbstractPagosCobrosMasivos
 {
-    /**
-     * Variable para desplegar resultados.
-     *
-     * @var bool
-     */
-    protected static $verbose;
-
-    /**
-     * Variable de instanciación del API Client.
-     * @var ApiClient
-     */
-    protected static $client;
-
-    /**
-     * RUT del emisor sin DV.
-     *
-     * @var int
-     */
-    protected static $emisor_rut;
-
-    /**
-     * Inicialización de variables y clases pre ejecución de tests.
-     *
-     * @return void
-     */
-    public static function setUpBeforeClass(): void
-    {
-        self::$verbose = env('TEST_VERBOSE', false);
-        self::$emisor_rut = (int)(explode('-', (string)env('LIBREDTE_RUT'))[0]);
-        self::$client = new ApiClient();
-    }
-
-    /**
-     * Método privado para buscar un DTE emitido.
-     *
-     * @throws \libredte\api_client\ApiException
-     *
-     * @return array Arreglo con los DTEs emitidos.
-     */
-    private function _buscar(): array
-    {
-        # Filtros para la petición http.
-        $filtros = [
-            'fecha_desde' => '2015-01-01',
-            'fecha_hasta' => date('Y-m-d'),
-        ];
-        # Recurso a consumir.
-        $resource = sprintf('/dte/dte_emitidos/buscar/%d', self::$emisor_rut);
-        # Se envía la solicitud http y se guarda su respuesta.
-        $response = self::$client->post($resource, $filtros);
-        # Si el código http no es '200', arroja error ApiException.
-        if ($response['status']['code'] != '200') {
-            throw new ApiException($response['body'], (int)$response['status']['code']);
-        }
-        return $response['body'];
-    }
-
     /**
      * Método de test para obtener un cobro asociado a un DTE emitido.
      *
@@ -101,34 +45,41 @@ class ObtenerCobroDocumentoEmitidoTest extends TestCase
     public function testObtenerCobroDteEmitido(): void
     {
         try {
-            # Búsqueda de DTE emitido.
-            $documentos = $this->_buscar();
-            # Recurso a consumir.
+            // Búsqueda de DTE emitido.
+            $documentos = $this->listarDteEmitidos();
+            // Recurso a consumir.
             $resource = sprintf(
                 '/dte/dte_emitidos/cobro/%d/%d/%d',
-                $documentos[0]['dte'],
-                $documentos[0]['folio'],
+                $documentos['body'][0]['dte'],
+                $documentos['body'][0]['folio'],
                 self::$emisor_rut
             );
-            # Se envía la solicitud http y se guarda su respuesta.
-            # Se obtiene el cobro asociado con el recurso previo.
+            // Se envía la solicitud http y se guarda su respuesta.
+            // Se obtiene el cobro asociado con el recurso previo.
             $response = self::$client->get($resource);
-            # Si el código http no es '200', arroja error ApiException.
+            // Si el código http no es '200', arroja error ApiException.
             if ($response['status']['code'] != '200') {
-                throw new ApiException($response['body'], (int)$response['status']['code']);
+                throw new ApiException(
+                    $response['body'],
+                    (int)$response['status']['code']
+                );
             }
-            # Se compara el código con '200' Si no es 200, la prueba falla.
+            // Se compara el código con '200' Si no es 200, la prueba falla.
             $this->assertSame('200', $response['status']['code']);
-            # Se despliega en consola los resultados si verbose es true.
+            // Se despliega en consola los resultados si verbose es true.
             if (self::$verbose) {
-                $dte_id = 'T'.$documentos[0]['dte'].'F'.$documentos[0]['folio'];
-                echo "\n",'test_pagos_generar_cobro_dte_emitido() dte_id ',$dte_id,"\n";
-                echo "\n",'test_pagos_generar_cobro_dte_emitido() cobro_codigo ',$response['body']['codigo'],"\n";
+                echo "\n",'testObtenerCobroDteEmitido() Cobro: ',json_encode(
+                    $response['body']
+                ),"\n";
             }
         } catch (ApiException $e) {
-            # Si falla, desplegará el mensaje y error en el siguiente formato:
-            # [ApiException codigo-http] mensaje]
-            $this->fail(sprintf('[ApiException %d] %s', $e->getCode(), $e->getMessage()));
+            // Si falla, desplegará el mensaje y error en el siguiente formato:
+            // [ApiException codigo-http] mensaje]
+            $this->fail(sprintf(
+                '[ApiException %d] %s',
+                $e->getCode(),
+                $e->getMessage()
+            ));
         }
     }
 }

@@ -58,7 +58,10 @@ abstract class AbstractPagosCobrosMasivos extends TestCase
     public static function setUpBeforeClass(): void
     {
         self::$verbose = env('TEST_VERBOSE', false);
-        self::$emisor_rut = (int)(explode('-', (string)env('LIBREDTE_RUT'))[0]);
+        self::$emisor_rut = (int)(explode(
+            '-',
+            (string)env('LIBREDTE_RUT'))[0]
+        );
         self::$client = new ApiClient();
     }
 
@@ -67,29 +70,39 @@ abstract class AbstractPagosCobrosMasivos extends TestCase
      *
      * @throws \libredte\api_client\ApiException
      *
-     * @return array Arreglo que contiene el resultado de los cobros entre 2015 y hoy.
+     * @return array Arreglo que contiene el resultado de los cobros entre
+     * 2015 y hoy.
      */
     protected function listarCobros(): array
     {
-        # Se crea la lista con filtros para aplicar a la búsqueda.
+        // Se crea la lista con filtros para aplicar a la búsqueda.
         $filtros = [
-            'fecha_desde' => '2015-01-01',
+            'fecha_desde' => date('Y-m-d', strtotime('-30 days')),
             'fecha_hasta' => date('Y-m-d'),
             'pagado' => false
         ];
-        # Se genera el recurso a consumir.
-        $resource = sprintf('/pagos/cobros/buscar/%d', self::$emisor_rut);
-        # Se envía la solicitud http y se guarda su respuesta.
+        // Se genera el recurso a consumir.
+        $resource = sprintf(
+            '/pagos/cobros/buscar/%d',
+            self::$emisor_rut
+        );
+        // Se envía la solicitud http y se guarda su respuesta.
         $response = self::$client->post($resource, $filtros);
 
-        # Si el código http no es '200', arroja error ApiException.
+        // Si el código http no es '200', arroja error ApiException.
         if ($response['status']['code'] != '200') {
-            throw new ApiException($response['body'], (int)$response['status']['code']);
+            throw new ApiException(
+                $response['body'],
+                (int)$response['status']['code']
+            );
         }
-        # Si el body de la respuesta es vacío o nulo, arroja error
-        # ApiException.
+        // Si el body de la respuesta es vacío o nulo, arroja error
+        // ApiException.
         if (empty($response['body'])) {
-            throw new ApiException('No se encontraron cobros para la búsqueda realizada.', 404);
+            throw new ApiException(
+                'No se encontraron cobros para la búsqueda realizada.',
+                404
+            );
         }
         return $response;
     }
@@ -103,7 +116,7 @@ abstract class AbstractPagosCobrosMasivos extends TestCase
      */
     private function emitirDteTemp(): array
     {
-        # Datos del DTE temporal a emitir.
+        // Datos del DTE temporal a emitir.
         $datos = [
             'Encabezado' => [
                 'IdDoc' => [
@@ -139,12 +152,18 @@ abstract class AbstractPagosCobrosMasivos extends TestCase
             ],
         ];
 
-        # Se envía la solicitud http y se guarda su respuesta.
-        $response = self::$client->post('/dte/documentos/emitir', $datos);
+        // Se envía la solicitud http y se guarda su respuesta.
+        $response = self::$client->post(
+            '/dte/documentos/emitir',
+            $datos
+        );
 
-        # Si el código http no es '200', arroja error ApiException.
+        // Si el código http no es '200', arroja error ApiException.
         if ($response['status']['code'] !== '200') {
-            throw new ApiException($response['body'], (int)$response['status']['code']);
+            throw new ApiException(
+                $response['body'],
+                (int)$response['status']['code']
+            );
         }
 
         return $response;
@@ -159,10 +178,10 @@ abstract class AbstractPagosCobrosMasivos extends TestCase
      */
     protected function obtenerCobroDteTemp(): array
     {
-        # Se emite un documento temporal para obtener su cobro
+        // Se emite un documento temporal para obtener su cobro
         $documento = $this->emitirDteTemp();
 
-        # Se genera el recurso a consumir.
+        // Se genera el recurso a consumir.
         $resource = sprintf(
             '/dte/dte_tmps/cobro/%d/%d/%s/%d',
             $documento['body']['receptor'],
@@ -170,13 +189,86 @@ abstract class AbstractPagosCobrosMasivos extends TestCase
             $documento['body']['codigo'],
             self::$emisor_rut
         );
-        # Se envía la solicitud http y se guarda su respuesta.
+        // Se envía la solicitud http y se guarda su respuesta.
         $response = self::$client->get($resource);
-        # Si el código http no es '200', arroja error ApiException.
+        // Si el código http no es '200', arroja error ApiException.
         if ($response['status']['code'] != '200') {
-            throw new ApiException($response['body'], (int)$response['status']['code']);
+            throw new ApiException(
+                $response['body'],
+                (int)$response['status']['code']
+            );
         }
 
+        return $response;
+    }
+
+    /**
+     * Método privado para buscar un DTE emitido.
+     *
+     * @throws \libredte\api_client\ApiException
+     *
+     * @return array Arreglo con los DTEs emitidos.
+     */
+    protected function listarDteEmitidos(): array
+    {
+        // Filtros para la petición http.
+        $filtros = [
+            'fecha_desde' => date('Y-m-d', strtotime('-30 days')),
+            'fecha_hasta' => date('Y-m-d'),
+        ];
+        // Recurso a consumir.
+        $resource = sprintf(
+            '/dte/dte_emitidos/buscar/%d',
+            self::$emisor_rut
+        );
+        // Se envía la solicitud http y se guarda su respuesta.
+        $response = self::$client->post($resource, $filtros);
+        // Si el código http no es '200', arroja error ApiException.
+        if ($response['status']['code'] != '200') {
+            throw new ApiException(
+                $response['body'],
+                (int)$response['status']['code']
+            );
+        }
+        return $response;
+    }
+
+    /**
+     * Método privado para listar cobros masivos programados.
+     *
+     * @throws \libredte\api_client\ApiException
+     *
+     * @return array Arreglo con los cobros masivos programados.
+     */
+    protected function listarCobrosMasivosProgramados(): array
+    {
+        // Filtros para la petición http.
+        $filtros = [
+            'siguiente_desde' => date('Y-m-d', strtotime('-30 days')),
+            'siguiente_hasta' => date('Y-m-d'),
+            'activo' => true,
+        ];
+        // Recurso a consumir.
+        $resource = sprintf(
+            '/pagos/cobro_masivo_programados/buscar/%d',
+            self::$emisor_rut
+        );
+        // Se envía la solicitud http y se guarda su respuesta.
+        $response = self::$client->post($resource, $filtros);
+        // Si el código http no es '200', arroja error ApiException.
+        if ($response['status']['code'] != '200') {
+            throw new ApiException(
+                $response['body'],
+                (int)$response['status']['code']
+            );
+        }
+        // Si el body de la respuesta es vacío o nulo, arroja error ApiException.
+        if (empty($response['body'])) {
+            throw new ApiException(
+                'No se encontraron cobros masivos programados para la búsqueda realizada.',
+                404
+            );
+        }
         return $response;
     }
 }

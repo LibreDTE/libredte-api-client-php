@@ -44,10 +44,10 @@ class BuscarDteTempTest extends AbstractDteFacturacion
     public function testBuscarDteTemp(): void
     {
         try {
-            # Se emite un DTE temporal para ejecutar esta prueba.
+            // Se emite un DTE temporal para ejecutar esta prueba.
             $dte_temp = $this->emitirDteTemp();
 
-            # Se genera el recurso para buscar el DTE temporal generado.
+            // Se genera el recurso para buscar el DTE temporal generado.
             $resource = sprintf(
                 "/dte/dte_tmps/info/%d/%d/%s/%d",
                         $dte_temp['body']['receptor'],
@@ -56,25 +56,34 @@ class BuscarDteTempTest extends AbstractDteFacturacion
                         self::$emisor_rut
             );
 
-            # Se envía la solicitud http y se guarda su respuesta.
+            // Se envía la solicitud http y se guarda su respuesta.
             $response = self::$client->get($resource);
-            # Si el código http no es '200', arroja error ApiException.
+            // Si el código http no es '200', arroja error ApiException.
             if ($response['status']['code'] !== '200') {
-                throw new ApiException($response['body'], (int)$response['status']['code']);
+                throw new ApiException(
+                    $response['body'],
+                    (int)$response['status']['code']
+                );
             }
-            # Se obtiene el body de la lista.
+            // Se obtiene el body de la lista.
             $documento = $response['body'];
 
-            # Se compara el código con '200' Si no es 200, la prueba falla.
+            // Se compara el código con '200' Si no es 200, la prueba falla.
             $this->assertSame('200', $response['status']['code']);
-            # Se despliega en consola los resultados si verbose es true.
+            // Se despliega en consola los resultados si verbose es true.
             if (self::$verbose) {
-                echo "\n",'testBuscarDteTemp() DTE: ',json_encode($documento),"\n";
+                echo "\n",'testBuscarDteTemp() DTE: ',json_encode(
+                    $documento
+                ),"\n";
             }
         } catch (ApiException $e) {
-            # Si falla, desplegará el mensaje y error en el siguiente formato:
-            # [ApiException codigo-http] mensaje]
-            $this->fail(sprintf('[ApiException %d] %s', $e->getCode(), $e->getMessage()));
+            // Si falla, desplegará el mensaje y error en el siguiente formato:
+            // [ApiException codigo-http] mensaje]
+            $this->fail(sprintf(
+                '[ApiException %d] %s',
+                $e->getCode(),
+                $e->getMessage()
+            ));
         }
     }
 }

@@ -26,8 +26,8 @@ namespace libredte\api_client;
 /**
  * Clase ApiClient para la integración con la API de LibreDTE.
  *
- * Proporciona funcionalidades para realizar peticiones HTTP a la API de LibreDTE,
- * incluyendo métodos para realizar solicitudes GET y POST.
+ * Proporciona funcionalidades para realizar peticiones HTTP a la API de
+ * LibreDTE, incluyendo métodos para realizar solicitudes GET y POST.
  */
 class ApiClient
 {
@@ -66,8 +66,8 @@ class ApiClient
     /**
      * Constructor de la clase ApiClient.
      *
-     * Inicializa el cliente con las credenciales y la URL de la API. Si no se proporcionan,
-     * se intentará obtener desde las variables de entorno.
+     * Inicializa el cliente con las credenciales y la URL de la API. Si no se
+     * proporcionan, se intentará obtener desde las variables de entorno.
      *
      * @param string|null $hash Hash de autenticación del usuario en LibreDTE.
      * @param string|null $url URL base de la API de LibreDTE.
@@ -89,8 +89,8 @@ class ApiClient
     /**
      * Establece una cabecera para las solicitudes HTTP.
      *
-     * Permite definir un valor para una cabecera específica que se incluirá en todas
-     * las solicitudes HTTP realizadas por la instancia del cliente.
+     * Permite definir un valor para una cabecera específica que se incluirá en
+     * todas las solicitudes HTTP realizadas por la instancia del cliente.
      *
      * @param string $name Nombre de la cabecera.
      * @param mixed $value Valor de la cabecera.
@@ -103,10 +103,11 @@ class ApiClient
     /**
      * Configura las opciones de SSL para las conexiones HTTP.
      *
-     * Este método permite activar o desactivar la verificación del certificado SSL
-     * del servidor.
+     * Este método permite activar o desactivar la verificación del certificado
+     * SSL del servidor.
      *
-     * @param boolean $sslcheck Activar o desactivar la verificación del certificado SSL.
+     * @param boolean $sslcheck Activar o desactivar la verificación del
+     * certificado SSL.
      */
     public function setSSL($sslcheck = true)
     {
@@ -137,7 +138,8 @@ class ApiClient
     /**
      * Realiza una solicitud GET a la API de LibreDTE.
      *
-     * Recupera datos de un recurso específico de la API utilizando el método GET.
+     * Recupera datos de un recurso específico de la API utilizando el método
+     * GET.
      *
      * @param string $resource El recurso de la API a solicitar.
      * @param mixed $data Los datos a enviar en la solicitud GET.
@@ -162,7 +164,8 @@ class ApiClient
      * como el hash de autenticación o la URL base de la API.
      *
      * @param string $name Nombre de la variable de entorno.
-     * @return string|null Valor de la variable de entorno o null si no está definida.
+     * @return string|null Valor de la variable de entorno o null si no está
+     * definida.
      */
     private function env($name)
     {

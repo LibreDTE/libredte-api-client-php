@@ -26,8 +26,9 @@ namespace libredte\api_client;
 /**
  * Clase HttpCurlClient para realizar consultas HTTP utilizando cURL.
  *
- * Esta clase proporciona una interfaz para realizar peticiones HTTP, como GET y POST,
- * utilizando cURL. Ofrece configuración de SSL y manejo de errores de cURL.
+ * Esta clase proporciona una interfaz para realizar peticiones HTTP, como GET
+ * y POST, utilizando cURL. Ofrece configuración de SSL y manejo de errores de
+ * cURL.
  */
 class HttpCurlClient
 {
@@ -61,7 +62,8 @@ class HttpCurlClient
     /**
      * Devuelve el último error ocurrido en una petición HTTP.
      *
-     * Este método devuelve el último error generado por cURL en una petición HTTP.
+     * Este método devuelve el último error generado por cURL en una petición
+     * HTTP.
      *
      * @return string Descripción del último error de cURL.
      */
@@ -73,10 +75,11 @@ class HttpCurlClient
     /**
      * Configura las opciones de SSL para las peticiones HTTP.
      *
-     * Este método permite activar o desactivar la verificación del certificado SSL
-     * del servidor.
+     * Este método permite activar o desactivar la verificación del certificado
+     * SSL del servidor.
      *
-     * @param boolean $sslcheck Activar o desactivar la verificación del certificado SSL.
+     * @param boolean $sslcheck Activar o desactivar la verificación del
+     * certificado SSL.
      */
     public function setSSL($sslcheck = true)
     {
@@ -86,7 +89,8 @@ class HttpCurlClient
     /**
      * Realiza una solicitud HTTP a una URL.
      *
-     * Este método ejecuta una petición HTTP utilizando cURL y devuelve la respuesta.
+     * Este método ejecuta una petición HTTP utilizando cURL y devuelve la
+     * respuesta.
      * Soporta varios métodos HTTP como GET, POST, PUT, DELETE, etc.
      *
      * @param string $method Método HTTP a utilizar.
@@ -159,10 +163,12 @@ class HttpCurlClient
     }
 
     /**
-     * Método que procesa y convierte la cabecera en texto plano a un arreglo asociativo.
+     * Método que procesa y convierte la cabecera en texto plano a un arreglo
+     * asociativo.
      *
-     * Convierte las cabeceras HTTP dadas en texto plano a un arreglo asociativo. Si una cabecera
-     * aparece más de una vez, su valor será un arreglo con todos sus valores.
+     * Convierte las cabeceras HTTP dadas en texto plano a un arreglo
+     * asociativo. Si una cabecera aparece más de una vez, su valor será un
+     * arreglo con todos sus valores.
      *
      * @param string $headers_txt Cabeceras HTTP en formato de texto plano.
      * @return array Arreglo asociativo con las cabeceras procesadas.
@@ -197,13 +203,16 @@ class HttpCurlClient
     }
 
     /**
-     * Método que procesa la línea de estado de la respuesta HTTP y extrae información útil.
+     * Método que procesa la línea de estado de la respuesta HTTP y extrae
+     * información útil.
      *
-     * Extrae el protocolo, el código de estado y el mensaje del estado de la línea de respuesta HTTP.
+     * Extrae el protocolo, el código de estado y el mensaje del estado de la
+     * línea de respuesta HTTP.
      * Útil para entender y manejar la respuesta HTTP.
      *
      * @param array|string $response_line Línea de respuesta HTTP.
-     * @return array Arreglo con información del estado, incluyendo protocolo, código y mensaje.
+     * @return array Arreglo con información del estado, incluyendo protocolo,
+     * código y mensaje.
      */
     private function parseResponseStatus($response_line)
     {
