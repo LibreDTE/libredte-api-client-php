@@ -58,7 +58,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\libredte\\api_client\\ApiException",
             "name": "ApiException",
-            "summary": "Clase\u0020ApiException\u0020para\u0020la\u0020gesti\u00F3n\u0020de\u0020excepciones\u0020en\u0020el\u0020cliente\u0020de\u0020la\u0020API\u0020de\u0020LibreDTE.",
+            "summary": "Clase\u0020ApiException\u0020para\u0020la\u0020gesti\u00F3n\u0020de\u0020excepciones\u0020en\u0020el\u0020cliente\u0020de\u0020la\u0020API\nde\u0020LibreDTE.",
             "url": "classes/libredte-api-client-ApiException.html"
         },                {
             "fqsen": "\\libredte\\api_client\\HttpCurlClient",
@@ -88,12 +88,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\libredte\\api_client\\HttpCurlClient\u003A\u003AparseResponseHeaders\u0028\u0029",
             "name": "parseResponseHeaders",
-            "summary": "M\u00E9todo\u0020que\u0020procesa\u0020y\u0020convierte\u0020la\u0020cabecera\u0020en\u0020texto\u0020plano\u0020a\u0020un\u0020arreglo\u0020asociativo.",
+            "summary": "M\u00E9todo\u0020que\u0020procesa\u0020y\u0020convierte\u0020la\u0020cabecera\u0020en\u0020texto\u0020plano\u0020a\u0020un\u0020arreglo\nasociativo.",
             "url": "classes/libredte-api-client-HttpCurlClient.html#method_parseResponseHeaders"
         },                {
             "fqsen": "\\libredte\\api_client\\HttpCurlClient\u003A\u003AparseResponseStatus\u0028\u0029",
             "name": "parseResponseStatus",
-            "summary": "M\u00E9todo\u0020que\u0020procesa\u0020la\u0020l\u00EDnea\u0020de\u0020estado\u0020de\u0020la\u0020respuesta\u0020HTTP\u0020y\u0020extrae\u0020informaci\u00F3n\u0020\u00FAtil.",
+            "summary": "M\u00E9todo\u0020que\u0020procesa\u0020la\u0020l\u00EDnea\u0020de\u0020estado\u0020de\u0020la\u0020respuesta\u0020HTTP\u0020y\u0020extrae\ninformaci\u00F3n\u0020\u00FAtil.",
             "url": "classes/libredte-api-client-HttpCurlClient.html#method_parseResponseStatus"
         },                {
             "fqsen": "\\libredte\\api_client\\HttpCurlClient\u003A\u003A\u0024sslcheck",
