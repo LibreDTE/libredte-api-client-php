@@ -98,15 +98,17 @@ class CrearCobroMasivoProgramadoTest extends AbstractPagosCobrosMasivos
             // Si el código http no es '200', arroja error ApiException.
             if ($response['status']['code'] != '200') {
                 throw new ApiException(
-                    $response['body']
-                    , (int)$response['status']['code']
+                    message: $response['body'],
+                    code: (int)$response['status']['code']
                 );
             }
             // Se compara el código con '200' Si no es 200, la prueba falla.
             $this->assertSame('200', $response['status']['code']);
             // Se despliega en consola los resultados si verbose es true.
             if (self::$verbose) {
-                echo "\n",'testCrearCobroMasivoProgramado() Cobro: ',json_encode(
+                echo "\n",
+                'testCrearCobroMasivoProgramado() Cobro: ',
+                json_encode(
                     $response['body']
                 ),"\n";
             }

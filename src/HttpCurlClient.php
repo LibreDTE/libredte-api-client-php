@@ -54,7 +54,7 @@ class HttpCurlClient
      *
      * @return array Lista de errores de cURL.
      */
-    public function getErrors()
+    public function getErrors(): array
     {
         return $this->errors;
     }
@@ -67,7 +67,7 @@ class HttpCurlClient
      *
      * @return string Descripción del último error de cURL.
      */
-    public function getLastError()
+    public function getLastError(): string
     {
         return $this->errors[count($this->errors) - 1];
     }
@@ -81,7 +81,7 @@ class HttpCurlClient
      * @param boolean $sslcheck Activar o desactivar la verificación del
      * certificado SSL.
      */
-    public function setSSL($sslcheck = true)
+    public function setSSL(bool $sslcheck = true): void
     {
         $this->sslcheck = $sslcheck;
     }
@@ -99,8 +99,12 @@ class HttpCurlClient
      * @param array $headers Cabeceras HTTP a enviar.
      * @return array|false Respuesta HTTP o false en caso de error.
      */
-    public function query($method, string $url, $data = [], array $headers = [])
-    {
+    public function query(
+        string $method,
+        string $url,
+        mixed $data = [],
+        array $headers = []
+    ): array|bool {
         // preparar datos
         if ($data && $method != 'GET') {
             if (isset($data['@files'])) {
@@ -148,13 +152,19 @@ class HttpCurlClient
             $this->errors[] = curl_error($curl);
             return false;
         }
-        $headers_size = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
+        $headers_size = curl_getinfo(handle: $curl, option: CURLINFO_HEADER_SIZE);
         // cerrar conexión de curl
         curl_close($curl);
         // entregar respuesta de la solicitud
-        $response_headers = $this->parseResponseHeaders(substr($response, 0, $headers_size));
+        $response_headers = $this->parseResponseHeaders(
+            substr(
+                string: $response,
+                offset: 0,
+                length: $headers_size
+            )
+        );
         $body = substr($response, $headers_size);
-        $json = json_decode($body, true);
+        $json = json_decode(json: $body, associative: true);
         return [
             'status' => $this->parseResponseStatus($response_headers[0]),
             'header' => $response_headers,
@@ -173,7 +183,7 @@ class HttpCurlClient
      * @param string $headers_txt Cabeceras HTTP en formato de texto plano.
      * @return array Arreglo asociativo con las cabeceras procesadas.
      */
-    private function parseResponseHeaders($headers_txt)
+    private function parseResponseHeaders(string $headers_txt): array
     {
         $headers = [];
         $lineas = explode("\n", $headers_txt);
@@ -183,7 +193,11 @@ class HttpCurlClient
                 continue;
             }
             if (strpos($linea, ':')) {
-                list($key, $value) = explode(':', $linea, 2);
+                list($key, $value) = explode(
+                    separator: ':',
+                    string: $linea,
+                    limit: 2
+                );
             } else {
                 $key = 0;
                 $value = $linea;
@@ -214,12 +228,12 @@ class HttpCurlClient
      * @return array Arreglo con información del estado, incluyendo protocolo,
      * código y mensaje.
      */
-    private function parseResponseStatus($response_line)
+    private function parseResponseStatus(array|string $response_line): array
     {
         if (is_array($response_line)) {
             $response_line = $response_line[count($response_line) - 1];
         }
-        $parts = explode(' ', $response_line, 3);
+        $parts = explode(separator: ' ', string: $response_line, limit: 3);
         return [
             'protocol' => $parts[0],
             'code' => $parts[1],

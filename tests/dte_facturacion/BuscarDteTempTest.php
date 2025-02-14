@@ -50,10 +50,10 @@ class BuscarDteTempTest extends AbstractDteFacturacion
             // Se genera el recurso para buscar el DTE temporal generado.
             $resource = sprintf(
                 "/dte/dte_tmps/info/%d/%d/%s/%d",
-                        $dte_temp['body']['receptor'],
-                        $dte_temp['body']['dte'],
-                        $dte_temp['body']['codigo'],
-                        self::$emisor_rut
+                $dte_temp['body']['receptor'],
+                $dte_temp['body']['dte'],
+                $dte_temp['body']['codigo'],
+                self::$emisor_rut
             );
 
             // Se envía la solicitud http y se guarda su respuesta.
@@ -61,8 +61,8 @@ class BuscarDteTempTest extends AbstractDteFacturacion
             // Si el código http no es '200', arroja error ApiException.
             if ($response['status']['code'] !== '200') {
                 throw new ApiException(
-                    $response['body'],
-                    (int)$response['status']['code']
+                    message: $response['body'],
+                    code: (int)$response['status']['code']
                 );
             }
             // Se obtiene el body de la lista.

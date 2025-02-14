@@ -51,7 +51,7 @@ class GenerarDteRealTest extends AbstractDteFacturacion
                 'emisor' => self::$emisor_rut,
                 'receptor' => $dte_temp['body']['receptor'],
                 'dte' => $dte_temp['body']['dte'],
-                'codigo' => $dte_temp['body']['codigo']
+                'codigo' => $dte_temp['body']['codigo'],
             ];
             // Se envía la solicitud http y se guarda su respuesta.
             $response = self::$client->post(
@@ -61,8 +61,8 @@ class GenerarDteRealTest extends AbstractDteFacturacion
             // Si el código http no es '200', arroja error ApiException.
             if ($response['status']['code'] !== '200') {
                 throw new ApiException(
-                    $response['body'],
-                    (int)$response['status']['code']
+                    message: $response['body'],
+                    code: (int)$response['status']['code']
                 );
             }
             // Se compara el código con '200' Si no es 200, la prueba falla.

@@ -73,11 +73,11 @@ class ApiClient
      * @param string|null $url URL base de la API de LibreDTE.
      * @throws ApiException si el hash de autenticación no está presente.
      */
-    public function __construct($hash = null, $url = null)
+    public function __construct(string $hash = null, string $url = null)
     {
         $hash = $hash ?: $this->env('LIBREDTE_HASH');
         if (!$hash) {
-            throw new ApiException('LIBREDTE_HASH missing');
+            throw new ApiException(message: 'LIBREDTE_HASH missing');
         }
         $this->headers['Authorization'] = 'Basic ' . base64_encode(
             $hash . ':X'
@@ -94,8 +94,9 @@ class ApiClient
      *
      * @param string $name Nombre de la cabecera.
      * @param mixed $value Valor de la cabecera.
+     * @return void
      */
-    public function setHeader(string $name, $value)
+    public function setHeader(string $name, mixed $value): void
     {
         $this->headers[$name] = $value;
     }
@@ -108,8 +109,9 @@ class ApiClient
      *
      * @param boolean $sslcheck Activar o desactivar la verificación del
      * certificado SSL.
+     * @return void
      */
-    public function setSSL($sslcheck = true)
+    public function setSSL($sslcheck = true): void
     {
         $this->client->setSSL($sslcheck);
     }
@@ -120,18 +122,18 @@ class ApiClient
      * Envia datos a un recurso específico de la API utilizando el método POST.
      *
      * @param string $resource El recurso de la API a solicitar.
-     * @param mixed $data Los datos a enviar en la solicitud POST.
+     * @param mixed|null $data Los datos a enviar en la solicitud POST.
      * @param array $headers Encabezados adicionales para la solicitud.
      * @return array Respuesta de la API.
      */
-    public function post($resource, $data = null, array $headers = [])
+    public function post(string $resource, mixed $data = null, array $headers = []): array|bool
     {
         $headers = array_merge($this->headers, $headers);
         return $this->client->query(
-            'POST',
-            $this->api_url . $this->api_prefix . $resource,
-            $data,
-            $headers
+            method: 'POST',
+            url: $this->api_url . $this->api_prefix . $resource,
+            data: $data,
+            headers: $headers
         );
     }
 
@@ -142,18 +144,18 @@ class ApiClient
      * GET.
      *
      * @param string $resource El recurso de la API a solicitar.
-     * @param mixed $data Los datos a enviar en la solicitud GET.
+     * @param mixed|null $data Los datos a enviar en la solicitud GET.
      * @param array $headers Encabezados adicionales para la solicitud.
      * @return array Respuesta de la API.
      */
-    public function get($resource, $data = null, array $headers = [])
+    public function get(string $resource, mixed $data = null, array $headers = []): array|bool
     {
         $headers = array_merge($this->headers, $headers);
         return $this->client->query(
-            'GET',
-            $this->api_url . $this->api_prefix . $resource,
-            $data,
-            $headers
+            method: 'GET',
+            url: $this->api_url . $this->api_prefix . $resource,
+            data: $data,
+            headers: $headers
         );
     }
 
@@ -164,10 +166,10 @@ class ApiClient
      * como el hash de autenticación o la URL base de la API.
      *
      * @param string $name Nombre de la variable de entorno.
-     * @return string|null Valor de la variable de entorno o null si no está
+     * @return mixed|null Valor de la variable de entorno o null si no está
      * definida.
      */
-    private function env($name)
+    private function env($name): mixed
     {
         return function_exists('env') ? env($name) : getenv($name);
     }

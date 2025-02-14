@@ -24,8 +24,8 @@ declare(strict_types=1);
 use libredte\api_client\ApiClient;
 use libredte\api_client\ApiException;
 use libredte\api_client\HttpCurlClient;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 #[CoversClass(ApiClient::class)]
 #[CoversClass(HttpCurlClient::class)]
@@ -63,10 +63,12 @@ class AsientoContableTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$verbose = env('TEST_VERBOSE', false);
-        self::$emisor_rut = (int)(explode(
-            '-',
-            (string)env('LIBREDTE_RUT'))[0]
+        self::$verbose = env(varname: 'TEST_VERBOSE', default: false);
+        self::$emisor_rut = (int)(
+            explode(
+                '-',
+                (string)env('LIBREDTE_RUT')
+            )[0]
         );
         self::$client = new ApiClient();
     }
@@ -142,8 +144,14 @@ class AsientoContableTest extends TestCase
             $this->assertSame('200', $response['status']['code']);
             // Se despliega en consola los resultados si verbose es true.
             if (self::$verbose) {
-                echo "\n",'test_lce_crear_asiento() asiento ',$response['body']['asiento'],"\n";
-                echo "\n",'test_lce_crear_asiento() creado ',$response['body']['creado'],"\n";
+                echo "\n",
+                'test_lce_crear_asiento() asiento ',
+                $response['body']['asiento'],
+                "\n";
+                echo "\n",
+                'test_lce_crear_asiento() creado ',
+                $response['body']['creado'],
+                "\n";
             }
         } catch (ApiException $e) {
             // Si falla, desplegará el mensaje y error en el siguiente formato:
@@ -167,7 +175,10 @@ class AsientoContableTest extends TestCase
     {
         // Filtros para buscar asientos contables.
         $filtros = [
-            'fecha_desde' => date('Y-m-d', strtotime('-30 days')),
+            'fecha_desde' => date(
+                format: 'Y-m-d',
+                timestamp: strtotime('-30 days')
+            ),
             'fecha_hasta' => date('Y-m-d'),
         ];
         // Recurso a consumir.
@@ -176,12 +187,12 @@ class AsientoContableTest extends TestCase
             self::$emisor_rut
         );
         // Se envía la solicitud http y se guarda su respuesta.
-        $response = self::$client->post($resource, $filtros);
+        $response = self::$client->post(resource: $resource, data: $filtros);
         // Si el código http no es '200', arroja error ApiException.
         if ($response['status']['code'] != '200') {
             throw new ApiException(
-                $response['body'],
-                (int)$response['status']['code']
+                message: $response['body'],
+                code: (int)$response['status']['code']
             );
         }
         return $response['body'];
@@ -244,21 +255,30 @@ class AsientoContableTest extends TestCase
                 self::$emisor_rut
             );
             // Se envía la solicitud http y se guarda su respuesta.
-            $response = self::$client->post($url, $datos);
+            $response = self::$client->post(resource: $url, data: $datos);
             // Si el código http no es '200', arroja error ApiException.
             if ($response['status']['code'] != '200') {
                 throw new ApiException(
-                    $response['body'],
-                    (int)$response['status']['code']
+                    message: $response['body'],
+                    code: (int)$response['status']['code']
                 );
             }
             // Se compara el código con '200' Si no es 200, la prueba falla.
             $this->assertSame('200', $response['status']['code']);
             // Se despliega en consola los resultados si verbose es true.
             if (self::$verbose) {
-                echo "\n",'test_lce_editar_asiento() asiento ',$response['body']['asiento'],"\n";
-                echo "\n",'test_lce_editar_asiento() creado ',$response['body']['creado'],"\n";
-                echo "\n",'test_lce_editar_asiento() modificado ',$response['body']['modificado'],"\n";
+                echo "\n",
+                'test_lce_editar_asiento() asiento ',
+                $response['body']['asiento'],
+                "\n";
+                echo "\n",
+                'test_lce_editar_asiento() creado ',
+                $response['body']['creado'],
+                "\n";
+                echo "\n",
+                'test_lce_editar_asiento() modificado ',
+                $response['body']['modificado'],
+                "\n";
             }
         } catch (ApiException $e) {
             // Si falla, desplegará el mensaje y error en el siguiente formato:

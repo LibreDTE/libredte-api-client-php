@@ -25,7 +25,6 @@ use libredte\api_client\ApiClient;
 use libredte\api_client\ApiException;
 use libredte\api_client\HttpCurlClient;
 use libredte\pagos_cobros_masivos\AbstractPagosCobrosMasivos;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ApiClient::class)]
@@ -60,15 +59,17 @@ class ObtenerCobroDocumentoEmitidoTest extends AbstractPagosCobrosMasivos
             // Si el código http no es '200', arroja error ApiException.
             if ($response['status']['code'] != '200') {
                 throw new ApiException(
-                    $response['body'],
-                    (int)$response['status']['code']
+                    message: $response['body'],
+                    code: (int)$response['status']['code']
                 );
             }
             // Se compara el código con '200' Si no es 200, la prueba falla.
             $this->assertSame('200', $response['status']['code']);
             // Se despliega en consola los resultados si verbose es true.
             if (self::$verbose) {
-                echo "\n",'testObtenerCobroDteEmitido() Cobro: ',json_encode(
+                echo "\n",
+                'testObtenerCobroDteEmitido() Cobro: ',
+                json_encode(
                     $response['body']
                 ),"\n";
             }

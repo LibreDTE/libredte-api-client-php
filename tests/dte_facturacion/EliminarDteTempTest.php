@@ -41,7 +41,7 @@ class EliminarDteTempTest extends AbstractDteFacturacion
      *
      * @return void
      */
-    public function testEliminarDteTemp()
+    public function testEliminarDteTemp(): void
     {
         // Se emite un DTE temporal para ejecutar esta prueba.
         $dte_temp = $this->emitirDteTemp();
@@ -60,8 +60,8 @@ class EliminarDteTempTest extends AbstractDteFacturacion
             // Si el código http no es '200', arroja error ApiException.
             if ($response['status']['code'] !== '200') {
                 throw new ApiException(
-                    $response['body'],
-                    (int)$response['status']['code']
+                    message: $response['body'],
+                    code: (int)$response['status']['code']
                 );
             }
             // Se compara el código con '200' Si no es 200, la prueba falla.

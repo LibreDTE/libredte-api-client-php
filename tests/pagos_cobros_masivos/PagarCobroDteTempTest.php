@@ -56,20 +56,20 @@ class PagarCobroDteTempTest extends AbstractPagosCobrosMasivos
             // Se crea el array con los datos a enviar,
             $data = [
                 'medio' => 'efectivo',
-                'fecha' => (string)date('Y-m-d')
+                'fecha' => (string)date('Y-m-d'),
             ];
 
             // Se envía la solicitud http y se guarda su respuesta.
             $response = self::$client->post(
-                $resource,
-                $data
+                resource: $resource,
+                data: $data
             );
 
             // Si el código http no es '200', arroja error ApiException.
             if ($response['status']['code'] !== '200') {
                 throw new ApiException(
-                    $response['body'],
-                    (int)$response['status']['code']
+                    message: $response['body'],
+                    code: (int)$response['status']['code']
                 );
             }
 
@@ -77,7 +77,9 @@ class PagarCobroDteTempTest extends AbstractPagosCobrosMasivos
 
             // Se despliega en consola los resultados si verbose es true.
             if (self::$verbose) {
-                echo "\n",'testPagarCobroDteTemp() Cobro: ',json_encode(
+                echo "\n",
+                'testPagarCobroDteTemp() Cobro: ',
+                json_encode(
                     $response['body']
                 ),"\n";
             }

@@ -48,7 +48,9 @@ class ListarCobrosMasivosProgramadosTest extends AbstractPagosCobrosMasivos
             $this->assertTrue(true);
             // Se despliega en consola los resultados si verbose es true.
             if (self::$verbose) {
-                echo "\n",'testListarCobroMasivoProgramado() Cobro Masivo: ',json_encode(
+                echo "\n",
+                'testListarCobroMasivoProgramado() Cobro Masivo: ',
+                json_encode(
                     $cobros['body']
                 ),"\n";
             }

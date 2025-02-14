@@ -48,7 +48,9 @@ class ListarCobrosDteTempTest extends AbstractPagosCobrosMasivos
             $this->assertTrue(true);
             // Se despliega en consola los resultados si verbose es true.
             if (self::$verbose) {
-                echo "\n",'testListarCobrosDteTemp() Cobro: ',json_encode(
+                echo "\n",
+                'testListarCobrosDteTemp() Cobro: ',
+                json_encode(
                     $cobros['body']
                 ),"\n";
             }

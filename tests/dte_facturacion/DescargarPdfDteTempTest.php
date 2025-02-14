@@ -42,7 +42,7 @@ class DescargarPdfDteTempTest extends AbstractDteFacturacion
      *
      * @return void
      */
-    public function testDescargarPdfTemp(): void
+    public function testDescargarPdfDteTemp(): void
     {
         try {
             // Se emite un DTE temporal para ejecutar esta prueba.
@@ -63,8 +63,8 @@ class DescargarPdfDteTempTest extends AbstractDteFacturacion
             // Si el código http no es '200', arroja error ApiException.
             if ($response['status']['code'] !== '200') {
                 throw new ApiException(
-                    $response['body'],
-                    (int)$response['status']['code']
+                    message: $response['body'],
+                    code: (int)$response['status']['code']
                 );
             }
             // Se compara el código con '200' Si no es 200, la prueba falla.
@@ -75,7 +75,8 @@ class DescargarPdfDteTempTest extends AbstractDteFacturacion
             $currentDir = __DIR__;
 
             // Nueva ruta relativa para guardar el archivo PDF en "tests/archivos"
-            $targetDir = dirname($currentDir) . '/archivos/dte_facturacion';
+            $targetDir = dirname($currentDir) .
+            '/archivos/dte_facturacion';
 
             // Define el nombre del archivo PDF en el nuevo directorio
             $filename = $targetDir . '/' . sprintf(
@@ -87,7 +88,7 @@ class DescargarPdfDteTempTest extends AbstractDteFacturacion
 
             // Verifica si el directorio existe, si no, créalo
             if (!is_dir($targetDir)) {
-                mkdir($targetDir, 0777, true);
+                mkdir(directory: $targetDir, permissions: 0777, recursive: true);
             }
 
             // Se genera el archivo PDF.

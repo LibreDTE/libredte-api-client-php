@@ -57,10 +57,12 @@ abstract class AbstractPagosCobrosMasivos extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$verbose = env('TEST_VERBOSE', false);
-        self::$emisor_rut = (int)(explode(
-            '-',
-            (string)env('LIBREDTE_RUT'))[0]
+        self::$verbose = env(varname: 'TEST_VERBOSE', default: false);
+        self::$emisor_rut = (int)(
+            explode(
+                '-',
+                (string)env('LIBREDTE_RUT')
+            )[0]
         );
         self::$client = new ApiClient();
     }
@@ -77,9 +79,12 @@ abstract class AbstractPagosCobrosMasivos extends TestCase
     {
         // Se crea la lista con filtros para aplicar a la búsqueda.
         $filtros = [
-            'fecha_desde' => date('Y-m-d', strtotime('-30 days')),
+            'fecha_desde' => date(
+                format: 'Y-m-d',
+                timestamp: strtotime('-30 days')
+            ),
             'fecha_hasta' => date('Y-m-d'),
-            'pagado' => false
+            'pagado' => false,
         ];
         // Se genera el recurso a consumir.
         $resource = sprintf(
@@ -87,7 +92,7 @@ abstract class AbstractPagosCobrosMasivos extends TestCase
             self::$emisor_rut
         );
         // Se envía la solicitud http y se guarda su respuesta.
-        $response = self::$client->post($resource, $filtros);
+        $response = self::$client->post(resource: $resource, data: $filtros);
 
         // Si el código http no es '200', arroja error ApiException.
         if ($response['status']['code'] != '200') {
@@ -100,8 +105,8 @@ abstract class AbstractPagosCobrosMasivos extends TestCase
         // ApiException.
         if (empty($response['body'])) {
             throw new ApiException(
-                'No se encontraron cobros para la búsqueda realizada.',
-                404
+                message: 'No se encontraron cobros para la búsqueda realizada.',
+                code: 404
             );
         }
         return $response;
@@ -154,15 +159,15 @@ abstract class AbstractPagosCobrosMasivos extends TestCase
 
         // Se envía la solicitud http y se guarda su respuesta.
         $response = self::$client->post(
-            '/dte/documentos/emitir',
-            $datos
+            resource: '/dte/documentos/emitir',
+            data: $datos
         );
 
         // Si el código http no es '200', arroja error ApiException.
         if ($response['status']['code'] !== '200') {
             throw new ApiException(
-                $response['body'],
-                (int)$response['status']['code']
+                message: $response['body'],
+                code: (int)$response['status']['code']
             );
         }
 
@@ -194,8 +199,8 @@ abstract class AbstractPagosCobrosMasivos extends TestCase
         // Si el código http no es '200', arroja error ApiException.
         if ($response['status']['code'] != '200') {
             throw new ApiException(
-                $response['body'],
-                (int)$response['status']['code']
+                message: $response['body'],
+                code: (int)$response['status']['code']
             );
         }
 
@@ -213,7 +218,10 @@ abstract class AbstractPagosCobrosMasivos extends TestCase
     {
         // Filtros para la petición http.
         $filtros = [
-            'fecha_desde' => date('Y-m-d', strtotime('-30 days')),
+            'fecha_desde' => date(
+                format: 'Y-m-d',
+                timestamp: strtotime('-30 days')
+            ),
             'fecha_hasta' => date('Y-m-d'),
         ];
         // Recurso a consumir.
@@ -222,12 +230,12 @@ abstract class AbstractPagosCobrosMasivos extends TestCase
             self::$emisor_rut
         );
         // Se envía la solicitud http y se guarda su respuesta.
-        $response = self::$client->post($resource, $filtros);
+        $response = self::$client->post(resource: $resource, data: $filtros);
         // Si el código http no es '200', arroja error ApiException.
         if ($response['status']['code'] != '200') {
             throw new ApiException(
-                $response['body'],
-                (int)$response['status']['code']
+                message: $response['body'],
+                code: (int)$response['status']['code']
             );
         }
         return $response;
@@ -244,7 +252,10 @@ abstract class AbstractPagosCobrosMasivos extends TestCase
     {
         // Filtros para la petición http.
         $filtros = [
-            'siguiente_desde' => date('Y-m-d', strtotime('-30 days')),
+            'siguiente_desde' => date(
+                format: 'Y-m-d',
+                timestamp: strtotime('-30 days')
+            ),
             'siguiente_hasta' => date('Y-m-d'),
             'activo' => true,
         ];
@@ -254,19 +265,19 @@ abstract class AbstractPagosCobrosMasivos extends TestCase
             self::$emisor_rut
         );
         // Se envía la solicitud http y se guarda su respuesta.
-        $response = self::$client->post($resource, $filtros);
+        $response = self::$client->post(resource: $resource, data: $filtros);
         // Si el código http no es '200', arroja error ApiException.
         if ($response['status']['code'] != '200') {
             throw new ApiException(
-                $response['body'],
-                (int)$response['status']['code']
+                message: $response['body'],
+                code: (int)$response['status']['code']
             );
         }
         // Si el body de la respuesta es vacío o nulo, arroja error ApiException.
         if (empty($response['body'])) {
             throw new ApiException(
-                'No se encontraron cobros masivos programados para la búsqueda realizada.',
-                404
+                message: 'No se encontraron cobros masivos programados para la búsqueda realizada.',
+                code: 404
             );
         }
         return $response;
