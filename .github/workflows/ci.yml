@@ -34,8 +34,7 @@ jobs:
           LIBREDTE_HASH: ${{ secrets.LIBREDTE_HASH }}
           LIBREDTE_RUT: ${{ vars.LIBREDTE_RUT }}
         run: |
-          composer tests-dte
-          composer tests-cobros
+          composer tests-readonly
 
       - name: Upload PHPUnit result report
         if: failure()
