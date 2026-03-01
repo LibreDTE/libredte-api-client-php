@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * LibreDTE: Cliente de API en PHP.
  * Copyright (C) LibreDTE <https://www.libredte.cl>
@@ -22,12 +24,14 @@
 namespace libredte\api_client;
 
 /**
- * Clase ApiException para la gestión de excepciones en el cliente de la API de LibreDTE.
+ * Clase ApiException para la gestión de excepciones en el cliente de la API
+ * de LibreDTE.
  *
- * Esta clase extiende la clase Exception estándar de PHP y se utiliza para manejar
- * errores específicos que pueden ocurrir durante las interacciones con la API de LibreDTE.
- * Las instancias de ApiException pueden incluir información adicional relevante para
- * los errores de la API.
+ * Esta clase extiende la clase Exception estándar de PHP y se utiliza para
+ * manejar errores específicos que pueden ocurrir durante las interacciones
+ * con la API de LibreDTE.
+ * Las instancias de ApiException pueden incluir información adicional
+ * relevante para los errores de la API.
  */
 class ApiException extends \Exception
 {

@@ -6,7 +6,6 @@
     executionOrder="depends,defects"
     colors="true"
     testdox="true"
-    verbose="true"
     requireCoverageMetadata="true"
     beStrictAboutCoverageMetadata="true"
     beStrictAboutOutputDuringTests="false"
@@ -23,35 +22,40 @@
     failOnPhpunitDeprecation="true"
     failOnNotice="true"
 >
+    <source>
+        <include>
+            <directory suffix=".php">src</directory>
+        </include>
+    </source>
     <testsuites>
-        <testsuite name="LibreDTE: Cliente de API en PHP - Pruebas Unitarias.">
-            <directory>tests</directory>
-        </testsuite>
-        <testsuite name="dte">
+        <testsuite name="dte-facturacion">
             <directory>tests/dte_facturacion</directory>
         </testsuite>
-        <testsuite name="contab">
+        <testsuite name="lce-contabilidad">
             <directory>tests/lce_contabilidad</directory>
         </testsuite>
-        <testsuite name="pagos">
+        <testsuite name="pagos-cobros-mas">
             <directory>tests/pagos_cobros_masivos</directory>
         </testsuite>
-        <testsuite name="readonly">
-            <file>tests/dte_facturacion/BuscarDocumentoEmitidoTest.php</file>
-            <file>tests/pagos_cobros_masivos/BuscarCobroTest.php</file>
-        </testsuite>
-        <testsuite name="dte_temp">
-            <file>tests/dte_facturacion/EmitirDteTemporalTest.php</file>
-        </testsuite>
     </testsuites>
-    <filter>
-        <whitelist>
-            <directory suffix=".php">src</directory>
-        </whitelist>
-    </filter>
+    <coverage
+        ignoreDeprecatedCodeUnits="true"
+        pathCoverage="true"
+    >
+        <report>
+            <text
+                outputFile="var/tests-coverage.txt"
+                showUncoveredFiles="true"
+            />
+            <clover outputFile="var/tests-coverage.xml" />
+        </report>
+    </coverage>
+    <logging>
+        <testdoxText outputFile="var/tests-testdox.txt"/>
+    </logging>
     <php>
         <ini name="memory_limit" value="-1" />
-        <env name="LIBREDTE_URL" value="https://apigateway.cl" />
+        <env name="LIBREDTE_URL" value="https://libredte.cl" />
         <env name="LIBREDTE_RUT" value="76192083-9" />
     </php>
 </phpunit>

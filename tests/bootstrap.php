@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * LibreDTE: Cliente de API en PHP - Pruebas Unitarias.
  * Copyright (C) LibreDTE <https://www.libredte.cl>
@@ -25,22 +27,24 @@ date_default_timezone_set('America/Santiago');
 // dependencias de composer
 require_once __DIR__ . '/../vendor/autoload.php';
 
-// cargar variables de entorno
-$dotenv = \Dotenv\Dotenv::createMutable(__DIR__, 'test.env');
-try {
-    $dotenv->load();
-} catch (\Dotenv\Exception\InvalidPathException $e) {
-    die($e->getMessage());
-} catch (\Dotenv\Exception\InvalidFileException $e) {
-    die($e->getMessage());
+// cargar variables de entorno (según si test.env existe o no).
+if (file_exists(__DIR__ . '/test.env')) {
+    $dotenv = \Dotenv\Dotenv::createMutable(__DIR__, 'test.env');
+    try {
+        $dotenv->load();
+    } catch (\Dotenv\Exception\InvalidPathException $e) {
+        die($e->getMessage());
+    } catch (\Dotenv\Exception\InvalidFileException $e) {
+        die($e->getMessage());
+    }
 }
 
 /**
  * Función que carga una variable de entorno o su valor por defecto
- * @param varname Variable que se desea consultar
- * @param default Valor por defecto de la variable
+ * @param string varname Variable que se desea consultar
+ * @param mixed|null default Valor por defecto de la variable
  */
-function env($varname, $default = null)
+function env(string $varname, mixed $default = null)
 {
     if (isset($_ENV[$varname])) {
         return $_ENV[$varname];

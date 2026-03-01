@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * LibreDTE: Cliente de API en PHP.
  * Copyright (C) LibreDTE <https://www.libredte.cl>
@@ -24,12 +26,11 @@ namespace libredte\api_client;
 /**
  * Clase ApiClient para la integración con la API de LibreDTE.
  *
- * Proporciona funcionalidades para realizar peticiones HTTP a la API de LibreDTE,
- * incluyendo métodos para realizar solicitudes GET y POST.
+ * Proporciona funcionalidades para realizar peticiones HTTP a la API de
+ * LibreDTE, incluyendo métodos para realizar solicitudes GET y POST.
  */
 class ApiClient
 {
-
     /**
      * La URL base de la API de LibreDTE.
      *
@@ -65,18 +66,18 @@ class ApiClient
     /**
      * Constructor de la clase ApiClient.
      *
-     * Inicializa el cliente con las credenciales y la URL de la API. Si no se proporcionan,
-     * se intentará obtener desde las variables de entorno.
+     * Inicializa el cliente con las credenciales y la URL de la API. Si no se
+     * proporcionan, se intentará obtener desde las variables de entorno.
      *
      * @param string|null $hash Hash de autenticación del usuario en LibreDTE.
      * @param string|null $url URL base de la API de LibreDTE.
      * @throws ApiException si el hash de autenticación no está presente.
      */
-    public function __construct($hash = null, $url = null)
+    public function __construct(string $hash = null, string $url = null)
     {
         $hash = $hash ?: $this->env('LIBREDTE_HASH');
         if (!$hash) {
-            throw new ApiException('LIBREDTE_HASH missing');
+            throw new ApiException(message: 'LIBREDTE_HASH missing');
         }
         $this->headers['Authorization'] = 'Basic ' . base64_encode(
             $hash . ':X'
@@ -88,13 +89,14 @@ class ApiClient
     /**
      * Establece una cabecera para las solicitudes HTTP.
      *
-     * Permite definir un valor para una cabecera específica que se incluirá en todas
-     * las solicitudes HTTP realizadas por la instancia del cliente.
+     * Permite definir un valor para una cabecera específica que se incluirá en
+     * todas las solicitudes HTTP realizadas por la instancia del cliente.
      *
      * @param string $name Nombre de la cabecera.
      * @param mixed $value Valor de la cabecera.
+     * @return void
      */
-    public function setHeader(string $name, $value)
+    public function setHeader(string $name, mixed $value): void
     {
         $this->headers[$name] = $value;
     }
@@ -102,12 +104,14 @@ class ApiClient
     /**
      * Configura las opciones de SSL para las conexiones HTTP.
      *
-     * Este método permite activar o desactivar la verificación del certificado SSL
-     * del servidor.
+     * Este método permite activar o desactivar la verificación del certificado
+     * SSL del servidor.
      *
-     * @param boolean $sslcheck Activar o desactivar la verificación del certificado SSL.
+     * @param boolean $sslcheck Activar o desactivar la verificación del
+     * certificado SSL.
+     * @return void
      */
-    public function setSSL($sslcheck = true)
+    public function setSSL($sslcheck = true): void
     {
         $this->client->setSSL($sslcheck);
     }
@@ -118,39 +122,40 @@ class ApiClient
      * Envia datos a un recurso específico de la API utilizando el método POST.
      *
      * @param string $resource El recurso de la API a solicitar.
-     * @param mixed $data Los datos a enviar en la solicitud POST.
+     * @param mixed|null $data Los datos a enviar en la solicitud POST.
      * @param array $headers Encabezados adicionales para la solicitud.
      * @return array Respuesta de la API.
      */
-    public function post($resource, $data = null, array $headers = [])
+    public function post(string $resource, mixed $data = null, array $headers = []): array|bool
     {
         $headers = array_merge($this->headers, $headers);
         return $this->client->query(
-            'POST',
-            $this->api_url . $this->api_prefix . $resource,
-            $data,
-            $headers
+            method: 'POST',
+            url: $this->api_url . $this->api_prefix . $resource,
+            data: $data,
+            headers: $headers
         );
     }
 
     /**
      * Realiza una solicitud GET a la API de LibreDTE.
      *
-     * Recupera datos de un recurso específico de la API utilizando el método GET.
+     * Recupera datos de un recurso específico de la API utilizando el método
+     * GET.
      *
      * @param string $resource El recurso de la API a solicitar.
-     * @param mixed $data Los datos a enviar en la solicitud GET.
+     * @param mixed|null $data Los datos a enviar en la solicitud GET.
      * @param array $headers Encabezados adicionales para la solicitud.
      * @return array Respuesta de la API.
      */
-    public function get($resource, $data = null, array $headers = [])
+    public function get(string $resource, mixed $data = null, array $headers = []): array|bool
     {
         $headers = array_merge($this->headers, $headers);
         return $this->client->query(
-            'GET',
-            $this->api_url . $this->api_prefix . $resource,
-            $data,
-            $headers
+            method: 'GET',
+            url: $this->api_url . $this->api_prefix . $resource,
+            data: $data,
+            headers: $headers
         );
     }
 
@@ -161,11 +166,11 @@ class ApiClient
      * como el hash de autenticación o la URL base de la API.
      *
      * @param string $name Nombre de la variable de entorno.
-     * @return string|null Valor de la variable de entorno o null si no está definida.
+     * @return mixed|null Valor de la variable de entorno o null si no está
+     * definida.
      */
-    private function env($name)
+    private function env($name): mixed
     {
         return function_exists('env') ? env($name) : getenv($name);
     }
-
 }
