@@ -15,27 +15,26 @@
         "issues": "https://github.com/LibreDTE/libredte-api-client-php/issues",
         "source": "https://github.com/LibreDTE/libredte-api-client-php"
     },
-    "config": {
-        "platform": {
-            "php": "8.2"
-        }
-    },
     "require": {
         "php": "^8.2 || ^8.3",
         "ext-curl": "*"
     },
-    "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.63",
-        "phpstan/phpstan": "^1.12",
-        "phpunit/phpunit": "^11.3",
-        "vlucas/phpdotenv": "^5.6"
-    },
     "autoload": {
         "psr-4": {
-            "libredte\\api_client\\": "src/",
+            "libredte\\api_client\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
             "libredte\\dte_facturacion\\": "tests/dte_facturacion/",
             "libredte\\pagos_cobros_masivos\\": "tests/pagos_cobros_masivos/"
         }
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.94",
+        "phpstan/phpstan": "^1.12",
+        "phpunit/phpunit": "^13.0",
+        "vlucas/phpdotenv": "^5.6"
     },
     "scripts": {
         "docs": "php tools/phpdocumentor run --config=phpdoc.xml",
@@ -45,7 +44,7 @@
         "tests-cobros": "XDEBUG_MODE=coverage vendor/bin/phpunit --configuration=phpunit.xml --testsuite pagos-cobros-mas",
         "tests-readonly": "XDEBUG_MODE=coverage vendor/bin/phpunit --configuration=phpunit.xml --filter 'testBuscarDteTemp|testDescargarPdfDteTemp|testEmitirDteTemp|testEliminarDteTemp|testListarDteTemp|testListarCobrosDteTemp|testBuscarCobroDteTemp'",
         "phpcs-fix": "php-cs-fixer fix -v --config=php-cs-fixer.php .",
-        "phpcs-fix-dry-run": "php-cs-fixer fix -v --dry-run --diff --config=php-cs-fixer.php .",
+        "phpcs": "php-cs-fixer fix -v --dry-run --diff --config=php-cs-fixer.php .",
         "phpstan": "phpstan analyse --configuration=phpstan.neon --memory-limit=1G",
         "phpstan-export": "phpstan analyse --configuration=phpstan.neon --level 9 --generate-baseline"
     }

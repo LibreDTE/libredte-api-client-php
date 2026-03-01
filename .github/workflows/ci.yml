@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-      - master  # Ejecuta pruebas al hacer push en la rama 'master'
+      - master
 env:
   env_var: ${{ vars.ENV_CONTEXT_VAR }}
 
@@ -13,7 +13,7 @@ jobs:
 
     strategy:
       matrix:
-        php-version: ['8.3']  # Puedes cambiar las versiones según necesites
+        php-version: ['8.4', '8.5']
 
     steps:
       - name: Check out repository code
@@ -22,7 +22,7 @@ jobs:
       - name: Setup PHP ${{ matrix.php-version }}
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php-version }}  # Configura la versión de PHP desde la matriz
+          php-version: ${{ matrix.php-version }}
           extensions: curl, mbstring, intl, xdebug
           tools: composer
 

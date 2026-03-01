@@ -2,8 +2,8 @@ vendor/
 tests/test.env
 tests/archivos/dte_facturacion/*
 
+composer.lock
+
 var/
 tools/
 build/
-
-prueba-ejemplo.php
