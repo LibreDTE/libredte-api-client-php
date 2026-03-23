@@ -61,6 +61,21 @@ Search.appendIndex(
             "summary": "Clase\u0020ApiException\u0020para\u0020la\u0020gesti\u00F3n\u0020de\u0020excepciones\u0020en\u0020el\u0020cliente\u0020de\u0020la\u0020API\nde\u0020LibreDTE.",
             "url": "classes/libredte-api-client-ApiException.html"
         },                {
+            "fqsen": "\\libredte\\api_client\\ApiException\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/libredte-api-client-ApiException.html#method___construct"
+        },                {
+            "fqsen": "\\libredte\\api_client\\ApiException\u003A\u003AgetResponseBody\u0028\u0029",
+            "name": "getResponseBody",
+            "summary": "",
+            "url": "classes/libredte-api-client-ApiException.html#method_getResponseBody"
+        },                {
+            "fqsen": "\\libredte\\api_client\\ApiException\u003A\u003A\u0024responseBody",
+            "name": "responseBody",
+            "summary": "",
+            "url": "classes/libredte-api-client-ApiException.html#property_responseBody"
+        },                {
             "fqsen": "\\libredte\\api_client\\HttpCurlClient",
             "name": "HttpCurlClient",
             "summary": "Clase\u0020HttpCurlClient\u0020para\u0020realizar\u0020consultas\u0020HTTP\u0020utilizando\u0020cURL.",
