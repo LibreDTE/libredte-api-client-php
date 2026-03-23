@@ -76,11 +76,7 @@ class ObtenerCobroDocumentoEmitidoTest extends AbstractPagosCobrosMasivos
         } catch (ApiException $e) {
             // Si falla, desplegará el mensaje y error en el siguiente formato:
             // [ApiException codigo-http] mensaje]
-            $this->fail(sprintf(
-                '[ApiException %d] %s',
-                $e->getCode(),
-                $e->getMessage()
-            ));
+            $this->handleApiException($e);
         }
     }
 }

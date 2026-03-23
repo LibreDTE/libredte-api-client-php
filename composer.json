@@ -16,7 +16,7 @@
         "source": "https://github.com/LibreDTE/libredte-api-client-php"
     },
     "require": {
-        "php": "^8.2 || ^8.3",
+        "php": "^8.5",
         "ext-curl": "*"
     },
     "autoload": {
@@ -27,12 +27,13 @@
     "autoload-dev": {
         "psr-4": {
             "libredte\\dte_facturacion\\": "tests/dte_facturacion/",
+            "libredte\\helpers\\": "tests/Helpers/",
             "libredte\\pagos_cobros_masivos\\": "tests/pagos_cobros_masivos/"
         }
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.94",
-        "phpstan/phpstan": "^1.12",
+        "phpstan/phpstan": "^2",
         "phpunit/phpunit": "^13.0",
         "vlucas/phpdotenv": "^5.6"
     },

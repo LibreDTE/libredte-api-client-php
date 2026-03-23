@@ -13,7 +13,7 @@ jobs:
 
     strategy:
       matrix:
-        php-version: ['8.4', '8.5']
+        php-version: ['8.5']
 
     steps:
       - name: Check out repository code
@@ -33,6 +33,7 @@ jobs:
         env:
           LIBREDTE_HASH: ${{ secrets.LIBREDTE_HASH }}
           LIBREDTE_RUT: ${{ vars.LIBREDTE_RUT }}
+          ADD_SKIPPED: true
         run: |
           composer tests-readonly
 

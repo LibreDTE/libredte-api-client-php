@@ -41,8 +41,8 @@ if (file_exists(__DIR__ . '/test.env')) {
 
 /**
  * Función que carga una variable de entorno o su valor por defecto
- * @param string varname Variable que se desea consultar
- * @param mixed|null default Valor por defecto de la variable
+ * @param string $varname Variable que se desea consultar
+ * @param mixed|null $default Valor por defecto de la variable
  */
 function env(string $varname, mixed $default = null)
 {

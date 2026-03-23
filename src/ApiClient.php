@@ -73,8 +73,10 @@ class ApiClient
      * @param string|null $url URL base de la API de LibreDTE.
      * @throws ApiException si el hash de autenticación no está presente.
      */
-    public function __construct(string $hash = null, string $url = null)
-    {
+    public function __construct(
+        ?string $hash = null,
+        ?string $url = null
+    ) {
         $hash = $hash ?: $this->env('LIBREDTE_HASH');
         if (!$hash) {
             throw new ApiException(message: 'LIBREDTE_HASH missing');
@@ -126,8 +128,11 @@ class ApiClient
      * @param array $headers Encabezados adicionales para la solicitud.
      * @return array Respuesta de la API.
      */
-    public function post(string $resource, mixed $data = null, array $headers = []): array|bool
-    {
+    public function post(
+        string $resource,
+        mixed $data = null,
+        array $headers = []
+    ): array|bool {
         $headers = array_merge($this->headers, $headers);
         return $this->client->query(
             method: 'POST',
@@ -148,8 +153,11 @@ class ApiClient
      * @param array $headers Encabezados adicionales para la solicitud.
      * @return array Respuesta de la API.
      */
-    public function get(string $resource, mixed $data = null, array $headers = []): array|bool
-    {
+    public function get(
+        string $resource,
+        mixed $data = null,
+        array $headers = []
+    ): array|bool {
         $headers = array_merge($this->headers, $headers);
         return $this->client->query(
             method: 'GET',

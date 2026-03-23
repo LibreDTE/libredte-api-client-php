@@ -130,7 +130,7 @@ class HttpCurlClient
                 $url = sprintf("%s?%s", $url, $data);
             }
         } else {
-            curl_setopt($curl, CURLOPT_POST, 1);
+            curl_setopt($curl, CURLOPT_POST, true);
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
             if ($data) {
                 curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
@@ -144,8 +144,8 @@ class HttpCurlClient
         curl_setopt($curl, CURLOPT_HTTPHEADER, array_values($headers));
         // realizar consulta a curl recuperando cabecera y cuerpo
         curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl, CURLOPT_HEADER, 1);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_HEADER, true);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, $this->sslcheck);
         $response = curl_exec($curl);
         if (!$response) {
@@ -153,8 +153,8 @@ class HttpCurlClient
             return false;
         }
         $headers_size = curl_getinfo(handle: $curl, option: CURLINFO_HEADER_SIZE);
-        // cerrar conexión de curl
-        curl_close($curl);
+
+
         // entregar respuesta de la solicitud
         $response_headers = $this->parseResponseHeaders(
             substr(

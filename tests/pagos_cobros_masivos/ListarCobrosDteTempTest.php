@@ -45,7 +45,7 @@ class ListarCobrosDteTempTest extends AbstractPagosCobrosMasivos
             // Se obtiene un listado de cobros.
             $cobros = $this->listarCobros();
             // La prueba tendrá éxito si la búsqueda funciona.
-            $this->assertTrue(true);
+            $this->assertSame('200', $cobros['status']['code']);
             // Se despliega en consola los resultados si verbose es true.
             if (self::$verbose) {
                 echo "\n",
@@ -57,11 +57,7 @@ class ListarCobrosDteTempTest extends AbstractPagosCobrosMasivos
         } catch (ApiException $e) {
             // Si falla, desplegará el mensaje y error en el siguiente formato:
             // [ApiException codigo-http] mensaje]
-            $this->fail(sprintf(
-                '[ApiException %d] %s',
-                $e->getCode(),
-                $e->getMessage()
-            ));
+            $this->handleApiException($e);
         }
     }
 }

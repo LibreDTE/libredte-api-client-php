@@ -35,5 +35,20 @@ namespace libredte\api_client;
  */
 class ApiException extends \Exception
 {
-    // Aquí van los métodos y propiedades de la clase
+    private ?string $responseBody;
+
+    public function __construct(
+        string $message = '',
+        int $code = 0,
+        ?string $responseBody = null,
+        ?\Throwable $previous = null
+    ) {
+        parent::__construct($message, $code, $previous);
+        $this->responseBody = $responseBody;
+    }
+
+    public function getResponseBody(): ?string
+    {
+        return $this->responseBody;
+    }
 }

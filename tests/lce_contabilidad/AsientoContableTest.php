@@ -24,6 +24,7 @@ declare(strict_types=1);
 use libredte\api_client\ApiClient;
 use libredte\api_client\ApiException;
 use libredte\api_client\HttpCurlClient;
+use libredte\helpers\FunctionHelpers;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
@@ -35,6 +36,8 @@ use PHPUnit\Framework\TestCase;
  */
 class AsientoContableTest extends TestCase
 {
+    use FunctionHelpers;
+
     /**
      * Variable para desplegar resultados.
      *
@@ -63,6 +66,8 @@ class AsientoContableTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
+        self::requireEnv('LIBREDTE_HASH');
+        self::requireEnv('LIBREDTE_RUT');
         self::$verbose = env(varname: 'TEST_VERBOSE', default: false);
         self::$emisor_rut = (int)(
             explode(
@@ -156,11 +161,7 @@ class AsientoContableTest extends TestCase
         } catch (ApiException $e) {
             // Si falla, desplegará el mensaje y error en el siguiente formato:
             // [ApiException codigo-http] mensaje]
-            $this->fail(sprintf(
-                '[ApiException %d] %s',
-                $e->getCode(),
-                $e->getMessage()
-            ));
+            $this->handleApiException($e);
         }
     }
 
@@ -208,8 +209,6 @@ class AsientoContableTest extends TestCase
         try {
             // Búsqueda de asiento contable.
             $asientos = $this->_buscar();
-            // assertTrue si la búsqueda fue exitosa.
-            $this->assertTrue(true);
             // Se despliega en consola los resultados si verbose es true.
             if (self::$verbose) {
                 echo "\n",'test_lce_buscar_asientos() n_asientos ',count(
@@ -219,11 +218,7 @@ class AsientoContableTest extends TestCase
         } catch (ApiException $e) {
             // Si falla, desplegará el mensaje y error en el siguiente formato:
             // [ApiException codigo-http] mensaje]
-            $this->fail(sprintf(
-                '[ApiException %d] %s',
-                $e->getCode(),
-                $e->getMessage()
-            ));
+            $this->handleApiException($e);
         }
     }
 
@@ -283,11 +278,7 @@ class AsientoContableTest extends TestCase
         } catch (ApiException $e) {
             // Si falla, desplegará el mensaje y error en el siguiente formato:
             // [ApiException codigo-http] mensaje]
-            $this->fail(sprintf(
-                '[ApiException %d] %s',
-                $e->getCode(),
-                $e->getMessage()
-            ));
+            $this->handleApiException($e);
         }
     }
 }

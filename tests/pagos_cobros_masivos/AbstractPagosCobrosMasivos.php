@@ -25,10 +25,13 @@ namespace libredte\pagos_cobros_masivos;
 
 use libredte\api_client\ApiClient;
 use libredte\api_client\ApiException;
+use libredte\helpers\FunctionHelpers;
 use PHPUnit\Framework\TestCase;
 
 abstract class AbstractPagosCobrosMasivos extends TestCase
 {
+    use FunctionHelpers;
+
     /**
      * Variable para desplegar resultados.
      *
@@ -57,6 +60,8 @@ abstract class AbstractPagosCobrosMasivos extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
+        self::requireEnv('LIBREDTE_HASH');
+        self::requireEnv('LIBREDTE_RUT');
         self::$verbose = env(varname: 'TEST_VERBOSE', default: false);
         self::$emisor_rut = (int)(
             explode(

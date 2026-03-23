@@ -48,7 +48,7 @@ class ListarDtesTempTest extends AbstractDteFacturacion
             $lista_dtes = $this->listarDteTemp();
 
             // La prueba tendrá éxito si la búsqueda funciona.
-            $this->assertTrue(true);
+            $this->assertSame('200', $lista_dtes['status']['code']);
             // Se despliega en consola los resultados si verbose es true.
             if (self::$verbose) {
                 echo "\n",'testListarDteTemps() Lista DTEs: ',json_encode(
@@ -58,11 +58,7 @@ class ListarDtesTempTest extends AbstractDteFacturacion
         } catch (ApiException $e) {
             // Si falla, desplegará el mensaje y error en el siguiente formato:
             // [ApiException codigo-http] mensaje]
-            $this->fail(sprintf(
-                '[ApiException %d] %s',
-                $e->getCode(),
-                $e->getMessage()
-            ));
+            $this->handleApiException($e);
         }
     }
 }
